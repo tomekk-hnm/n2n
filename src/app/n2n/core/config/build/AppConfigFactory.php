@@ -22,11 +22,11 @@
 namespace n2n\core\config\build;
 
 use n2n\util\StringUtils;
-use n2n\http\controller\ControllerDef;
+use n2n\web\http\controller\ControllerDef;
 use n2n\mail\smtp\SmtpConfig;
 use n2n\l10n\DateTimeFormat;
 use n2n\l10n\N2nLocale;
-use n2n\http\Subsystem;
+use n2n\web\http\Subsystem;
 use n2n\persistence\PersistenceUnitConfig;
 use n2n\util\crypt\EncryptionDescriptor;
 use n2n\io\fs\FsPath;
@@ -45,7 +45,7 @@ use n2n\l10n\L10nStyle;
 use n2n\l10n\L10nConfig;
 use n2n\l10n\PseudoL10nConfig;
 use n2n\l10n\L10nFormat;
-use n2n\http\Supersystem;
+use n2n\web\http\Supersystem;
 
 class AppConfigFactory {
 	const GROUP_GENERAL = 'general';

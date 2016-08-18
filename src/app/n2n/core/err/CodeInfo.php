@@ -21,7 +21,7 @@
  */
 namespace n2n\core\err;
 
-use n2n\ui\Raw;
+use n2n\web\ui\Raw;
 
 class CodeInfo {
 	private $filePath;

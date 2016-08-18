@@ -23,7 +23,7 @@ namespace n2n\core\module;
 
 use n2n\util\config\Attributes;
 use n2n\core\container\N2nContext;
-use n2n\dispatch\mag\MagDispatchable;
+use n2n\web\dispatch\mag\MagDispatchable;
 
 interface ConfigDescriber {
 	/**
@@ -33,7 +33,7 @@ interface ConfigDescriber {
 	
 	/**
 	 * @param N2nContext $n2nContext
-	 * @return \n2n\dispatch\mag\MagDispatchable
+	 * @return \n2n\web\dispatch\mag\MagDispatchable
 	 */
 	public function createMagDispatchable(): MagDispatchable;
 	

@@ -22,18 +22,18 @@
 namespace n2n\core\err;
 
 use n2n\log4php\Logger;
-use n2n\http\StatusException;
+use n2n\web\http\StatusException;
 use n2n\persistence\PdoPreparedExecutionException;
-use n2n\http\Response;
-use n2n\N2N;
+use n2n\web\http\Response;
+use n2n\core\N2N;
 use n2n\io\IoUtils;
-use n2n\http\BadRequestException;
+use n2n\web\http\BadRequestException;
 use n2n\util\ex\QueryStumble;
 use n2n\reflection\ReflectionUtils;
 use n2n\core\TypeLoader;
-use n2n\http\controller\ControllerContext;
+use n2n\web\http\controller\ControllerContext;
 use n2n\core\TypeNotFoundException;
-use n2n\ui\ViewFactory;
+use n2n\web\ui\ViewFactory;
 
 // define('N2N_EXCEPTION_HANDLING_PHP_SEVERITIES', E_ALL | E_STRICT);
 // define('N2N_EXCEPTION_HANDLING_PHP_STRICT_ATTITUTE_SEVERITIES', E_STRICT | E_WARNING | E_NOTICE | E_CORE_WARNING | E_USER_WARNING | E_USER_NOTICE | E_DEPRECATED);
@@ -48,9 +48,9 @@ class ExceptionHandler {
 	const STRICT_ATTITUTE_PHP_SEVERITIES = E_STRICT | E_WARNING | E_NOTICE | E_CORE_WARNING | E_USER_WARNING | E_USER_NOTICE | E_DEPRECATED;
 	
 	const LOG_FILE_EXTENSION = '.log';
-	const DEFAULT_500_DEV_VIEW = 'n2n\view\errorpages\500Dev.html';
-	const DEFAULT_STATUS_DEV_VIEW = 'n2n\view\errorpages\statusDev.html';
-	const DEFAULT_STATUS_LIVE_VIEW = 'n2n\view\errorpages\statusLive.html';
+	const DEFAULT_500_DEV_VIEW = 'n2n\core\view\errorpages\500Dev.html';
+	const DEFAULT_STATUS_DEV_VIEW = 'n2n\core\view\errorpages\statusDev.html';
+	const DEFAULT_STATUS_LIVE_VIEW = 'n2n\core\view\errorpages\statusLive.html';
 	
 	private $developmentMode;
 	

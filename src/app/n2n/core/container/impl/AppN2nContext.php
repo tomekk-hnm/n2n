@@ -21,12 +21,12 @@
  */
 namespace n2n\core\container\impl;
 
-use n2n\http\Request;
-use n2n\http\Response;
+use n2n\web\http\Request;
+use n2n\web\http\Response;
 use n2n\l10n\N2nLocale;
 use n2n\model\LookupManager;
 use n2n\reflection\ReflectionUtils;
-use n2n\http\HttpContextNotAvailableException;
+use n2n\web\http\HttpContextNotAvailableException;
 use n2n\reflection\magic\MagicObjectUnavailableException;
 use n2n\core\module\UnknownModuleException;
 use n2n\l10n\DynamicTextCollection;
@@ -38,7 +38,7 @@ use n2n\core\module\Module;
 use n2n\core\container\N2nContext;
 use n2n\core\container\TransactionManager;
 use n2n\core\module\ModuleManager;
-use n2n\http\HttpContext;
+use n2n\web\http\HttpContext;
 use n2n\core\container\AppCache;
 use n2n\util\ex\IllegalStateException;
 use n2n\core\config\GeneralConfig;

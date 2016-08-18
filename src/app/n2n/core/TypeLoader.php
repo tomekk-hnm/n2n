@@ -21,7 +21,7 @@
  */
 namespace n2n\core;
 
-use n2n\N2N;
+use n2n\core\N2N;
 use n2n\io\IoUtils;
 use n2n\util\StringUtils;
 use n2n\reflection\ReflectionUtils;

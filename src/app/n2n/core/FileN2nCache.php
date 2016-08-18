@@ -23,7 +23,7 @@ namespace n2n\core;
 
 use n2n\util\cache\impl\FileCacheStore;
 use n2n\core\config\AppConfig;
-use n2n\N2N;
+use n2n\core\N2N;
 use n2n\core\container\N2nContext;
 use n2n\io\IoUtils;
 use n2n\core\container\AppCache;

@@ -21,7 +21,7 @@
  */
 namespace n2n\core;
 
-use n2n\N2N;
+use n2n\core\N2N;
 use n2n\io\IoUtils;
 
 class N2nVars {

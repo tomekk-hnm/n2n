@@ -19,7 +19,7 @@
  * Bert Hofmänner.......: Idea, Community Leader, Marketing
  * Thomas Günther.......: Developer, Hangar
  */
-namespace n2n;
+namespace n2n\core;
 
 use n2n\core\container\TransactionManager;
 use n2n\log4php\Logger;
@@ -30,21 +30,21 @@ use n2n\core\module\Module;
 use n2n\core\err\ExceptionHandler;
 use n2n\core\TypeLoader;
 use n2n\core\VarStore;
-use n2n\dispatch\DispatchContext;
+use n2n\web\dispatch\DispatchContext;
 use n2n\core\N2nRuntimeException;
 use n2n\l10n\N2nLocale;
-use n2n\http\Response;
+use n2n\web\http\Response;
 use n2n\io\IoUtils;
 use n2n\l10n\Language;
 use n2n\l10n\Region;
 use n2n\batch\BatchJobRegistry;
 use n2n\core\container\N2nContext;
 use n2n\model\LookupManager;
-use n2n\http\Session;
-use n2n\http\controller\ControllerRegistry;
+use n2n\web\http\Session;
+use n2n\web\http\controller\ControllerRegistry;
 use n2n\core\N2nCache;
 use n2n\core\config\AppConfig;
-use n2n\http\VarsRequest;
+use n2n\web\http\VarsRequest;
 use n2n\util\uri\Path;
 use n2n\core\module\ModuleFactory;
 use n2n\core\module\impl\LazyModule;
@@ -55,12 +55,12 @@ use n2n\core\config\build\AppConfigFactory;
 use n2n\l10n\L10n;
 use n2n\core\module\ModuleManager;
 use n2n\core\container\impl\AppN2nContext;
-use n2n\http\HttpContext;
-use n2n\http\N2nLocaleFormat;
+use n2n\web\http\HttpContext;
+use n2n\web\http\N2nLocaleFormat;
 use n2n\reflection\CastUtils;
-use n2n\http\ResponseCacheStore;
-use n2n\dispatch\map\CorruptedDispatchException;
-use n2n\http\BadRequestException;
+use n2n\web\http\ResponseCacheStore;
+use n2n\web\dispatch\map\CorruptedDispatchException;
+use n2n\web\http\BadRequestException;
 use n2n\core\module\impl\EtcModuleFactory;
 
 define('N2N_CRLF', "\r\n");
@@ -334,7 +334,7 @@ class N2N {
 // 		ini_set('default_charset', self::CHARSET);
 		
 		self::$exceptionHandler = new ExceptionHandler(N2N::isDevelopmentModeOn());
-		register_shutdown_function(array('n2n\N2N', 'shutdown'));
+		register_shutdown_function(array('n2n\core\N2N', 'shutdown'));
 		
 		TypeLoader::register(get_include_path(), self::$exceptionHandler);
 		
@@ -360,7 +360,7 @@ class N2N {
 		self::$exceptionHandler->checkForStartupErrors();
 	}
 	/**
-	 * @param \n2n\N2N $n2n
+	 * @param \n2n\core\N2N $n2n
 	 */
 	private static function initLogging(N2N $n2n) {
 		$errorConfig = $n2n->appConfig->error();
@@ -436,7 +436,7 @@ class N2N {
 		unset(self::$shutdownListeners[spl_object_hash($shutdownListener)]);
 	}
 	/**
-	 * @return \n2n\N2N
+	 * @return \n2n\core\N2N
 	 * @throws \n2n\N2nHasNotYetBeenInitializedException
 	 */
 	protected static function _i() {
@@ -642,16 +642,16 @@ class N2N {
 	}
 	/**
 	 * 
-	 * @throws \n2n\http\HttpContextNotAvailableException
-	 * @return \n2n\http\Request
+	 * @throws \n2n\web\http\HttpContextNotAvailableException
+	 * @return \n2n\web\http\Request
 	 */
 	public static function getCurrentRequest() {
 		return self::getHttpContext()->getRequest();
 	}
 	/**
 	 * 
-	 * @throws \n2n\http\HttpContextNotAvailableException
-	 * @return \n2n\http\Response
+	 * @throws \n2n\web\http\HttpContextNotAvailableException
+	 * @return \n2n\web\http\Response
 	 */
 	public static function getCurrentResponse() {
 		return self::getHttpContext()->getResponse();
@@ -726,7 +726,7 @@ class N2N {
 	}
 	/**
 	 *
-	 * @return \n2n\dispatch\DispatchContext
+	 * @return \n2n\web\dispatch\DispatchContext
 	 */
 	public static function getDispatchContext() {
 		return self::_i()->n2nContext->getDispatchContext();

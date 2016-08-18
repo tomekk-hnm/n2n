@@ -26,8 +26,8 @@ use n2n\reflection\magic\MagicContext;
 use n2n\core\VarStore;
 use n2n\core\module\Module;
 use n2n\core\module\ModuleManager;
-use n2n\http\HttpContext;
-use n2n\http\HttpContextNotAvailableException;
+use n2n\web\http\HttpContext;
+use n2n\web\http\HttpContextNotAvailableException;
 
 interface N2nContext extends MagicContext {
 	
@@ -58,7 +58,7 @@ interface N2nContext extends MagicContext {
 	public function isHttpContextAvailable(): bool;
 	 
 	/**
-	 * @return \n2n\http\HttpContext
+	 * @return \n2n\web\http\HttpContext
 	 * @throws HttpContextNotAvailableException
 	 */
 	public function getHttpContext(): HttpContext;

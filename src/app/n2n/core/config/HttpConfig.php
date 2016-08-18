@@ -21,9 +21,9 @@
  */
 namespace n2n\core\config;
 
-use n2n\http\Subsystem;
+use n2n\web\http\Subsystem;
 use n2n\l10n\N2nLocale;
-use n2n\http\Supersystem;
+use n2n\web\http\Supersystem;
 
 class HttpConfig {
 	private $responseCachingEnabled;
