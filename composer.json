@@ -18,7 +18,7 @@
     },
     "autoload": {
         "psr-4": {
-            "n2n\\": "src/private"
+            "n2n\\": "src/app"
         }
     }
 }
