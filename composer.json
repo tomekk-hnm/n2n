@@ -8,13 +8,18 @@
     "authors": [
         {
             "name": "Andreas von Burg",
-            "email": "von-burg@hnm.ch",
+            "email": "a@von-burg.net",
             "homepage": "http://www.von-burg.net",
             "role": "Developer"
         }
     ],
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=7.0",
+        "n2n/n2n-io": "master-dev",
+        "n2n/n2n-l10n": "master-dev",
+        "n2n/n2n-log4php": "master-dev",
+        "n2n/n2n-reflection": "master-dev",
+        "n2n/n2n-util": "master-dev"
     },
     "autoload": {
         "psr-4": {
