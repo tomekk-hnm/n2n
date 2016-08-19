@@ -39,7 +39,7 @@ use n2n\l10n\Language;
 use n2n\l10n\Region;
 use n2n\batch\BatchJobRegistry;
 use n2n\core\container\N2nContext;
-use n2n\model\LookupManager;
+use n2n\context\LookupManager;
 use n2n\web\http\Session;
 use n2n\web\http\controller\ControllerRegistry;
 use n2n\core\N2nCache;
@@ -697,7 +697,7 @@ class N2N {
 		$controllerRegistry->createControllingPlan($request->getCmdPath(), $request->getSubsystemName())->execute();
 	}
 	/**
-	 * @return \n2n\model\LookupManager
+	 * @return \n2n\context\LookupManager
 	 */
 	public static function getLookupManager() {
 		return self::_i()->n2nContext->getLookupManager();

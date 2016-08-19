@@ -24,14 +24,14 @@ namespace n2n\core\container\impl;
 use n2n\web\http\Request;
 use n2n\web\http\Response;
 use n2n\l10n\N2nLocale;
-use n2n\model\LookupManager;
+use n2n\context\LookupManager;
 use n2n\reflection\ReflectionUtils;
 use n2n\web\http\HttpContextNotAvailableException;
 use n2n\reflection\magic\MagicObjectUnavailableException;
 use n2n\core\module\UnknownModuleException;
 use n2n\l10n\DynamicTextCollection;
 use n2n\reflection\magic\MagicUtils;
-use n2n\model\LookupFailedException;
+use n2n\context\LookupFailedException;
 use n2n\core\config\AppConfig;
 use n2n\core\VarStore;
 use n2n\core\module\Module;
@@ -84,7 +84,7 @@ class AppN2nContext implements N2nContext {
 	
 	/**
 	 * @throws IllegalStateException
-	 * @return \n2n\model\LookupManager
+	 * @return \n2n\context\LookupManager
 	 */
 	public function getLookupManager(): LookupManager {
 		if ($this->lookupManager !== null) {

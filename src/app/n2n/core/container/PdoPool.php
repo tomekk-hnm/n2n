@@ -29,7 +29,7 @@ use n2n\persistence\orm\model\EntityModelManager;
 use n2n\persistence\orm\proxy\EntityProxyManager;
 use n2n\core\container\TransactionManager;
 use n2n\reflection\magic\MagicContext;
-use n2n\model\ThreadScoped;
+use n2n\context\ThreadScoped;
 use n2n\core\config\DbConfig;
 use n2n\persistence\orm\model\EntityModelFactory;
 use n2n\core\container\N2nContext;
