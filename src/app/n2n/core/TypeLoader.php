@@ -43,12 +43,17 @@ class TypeLoader {
 	 * @param string $moduleIncludePath
 	 * @param ExceptionHandler $exceptionHandler
 	 */
-	public static function register($includePath, ExceptionHandler $exceptionHandler) {
-		// @todo check if include paths are valid
+	public static function register(string $includePath = null) {
+		if ($includePath === null) {
+			$includePath = get_include_path();
+		}
 		self::$includePaths = explode(PATH_SEPARATOR, $includePath);
-		self::$exceptionHandler = $exceptionHandler;
-
+		
 		spl_autoload_register('n2n\\core\\TypeLoader::load', true);
+	}
+	
+	public static function registerExceptionHandler(ExceptionHandler $exceptionHandler) {
+		self::$exceptionHandler = $exceptionHandler;
 	}
 	/**
 	 * 
@@ -238,26 +243,4 @@ class TypeLoader {
 		throw new FileIsNotPartOfIncludePathException('File path is not part of a include path: '
 				. $filePath);
 	}
-}
-
-class TypeLoaderErrorException extends \ErrorException {
-	private $typeName;
-	
-	public function __construct($typeName, $message, $code, $severity, $errFilePath = null, $errLineNo = null) {
-		parent::__construct((string) $message, $code, $severity, $errFilePath, $errLineNo);
-		
-		$this->typeName = $typeName;
-	}
-	
-	public function getTypeName(): string {
-		return $this->typeName;
-	}
-}
-
-class TypeNotFoundException extends N2nRuntimeException {
-	
-}
-
-class FileIsNotPartOfIncludePathException extends N2nRuntimeException {
-	
 }

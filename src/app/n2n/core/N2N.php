@@ -65,15 +65,6 @@ use n2n\core\module\impl\EtcModuleFactory;
 
 define('N2N_CRLF', "\r\n");
 
-require_once 'n2n/util/ex/Documentable.php';
-require_once 'n2n/util/ex/err/EnhancedError.php';
-require_once 'n2n/util/ex/err/FancyErrorException.php';
-require_once 'n2n/core/N2nErrorException.php';
-require_once 'n2n/core/N2nRuntimeException.php';
-require_once 'n2n/core/TypeLoader.php';
-require_once 'n2n/core/ShutdownListener.php';
-require_once 'n2n/core/err/ExceptionHandler.php';
-
 class N2N {
 	const VERSION = '7.1.8';
 	const LOG4PHP_CONFIG_FILE = 'log4php.xml'; 
@@ -336,7 +327,7 @@ class N2N {
 		self::$exceptionHandler = new ExceptionHandler(N2N::isDevelopmentModeOn());
 		register_shutdown_function(array('n2n\core\N2N', 'shutdown'));
 		
-		TypeLoader::register(get_include_path(), self::$exceptionHandler);
+		TypeLoader::registerExceptionHandler(self::$exceptionHandler);
 		
 		self::$n2n = new N2N(new FsPath(IoUtils::realpath($publicDirPath)), 
 				new FsPath(IoUtils::realpath($varDirPath)));
