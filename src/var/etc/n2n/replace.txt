@@ -1,0 +1,17 @@
+n2n\\N2N
+n2n\core\N2N
+
+n2n\\http
+n2n\web\http
+
+n2n\\dispatch
+n2n\web\dispatch
+
+n2n\\ui
+n2n\web\ui
+
+n2n\\view\\errorpages
+n2n\core\view\errorpages
+
+n2n/N2N.php
+n2n/core/N2N.php
