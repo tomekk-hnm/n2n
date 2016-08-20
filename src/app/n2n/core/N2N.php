@@ -327,8 +327,6 @@ class N2N {
 		self::$exceptionHandler = new ExceptionHandler(N2N::isDevelopmentModeOn());
 		register_shutdown_function(array('n2n\core\N2N', 'shutdown'));
 		
-		TypeLoader::registerExceptionHandler(self::$exceptionHandler);
-		
 		self::$n2n = new N2N(new FsPath(IoUtils::realpath($publicDirPath)), 
 				new FsPath(IoUtils::realpath($varDirPath)));
 	}

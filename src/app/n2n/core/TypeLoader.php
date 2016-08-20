@@ -22,47 +22,66 @@
 namespace n2n\core;
 
 use n2n\core\N2N;
-use n2n\io\IoUtils;
 use n2n\util\StringUtils;
 use n2n\reflection\ReflectionUtils;
-use n2n\core\err\ExceptionHandler;
 
 class TypeLoader {
 	const SCRIPT_FILE_EXTENSION = '.php';
 	
-	private static $includePaths;
-	private static $exceptionHandler;
+	private static $useIncludePath = false;
+	private static $psr4Map = array();
+	private static $classMap = array();
 	private static $latestException = null;
 	
 	public static function getIncludePaths() {
 		return self::$includePaths;
 	}
+	
+	public static function isRegistered() {
+		return self::$includePaths !== null;
+	}
 	/**
 	 * 
 	 * @param string $includePath
 	 * @param string $moduleIncludePath
-	 * @param ExceptionHandler $exceptionHandler
 	 */
-	public static function register(string $includePath = null) {
-		if ($includePath === null) {
-			$includePath = get_include_path();
-		}
-		self::$includePaths = explode(PATH_SEPARATOR, $includePath);
+	public static function register(bool $useIncludePath = true, array $psr4Map = array(), array $classMap = array()) {
+		self::init($useIncludePath, $psr4Map, $classMap);
 		
 		spl_autoload_register('n2n\\core\\TypeLoader::load', true);
 	}
 	
-	public static function registerExceptionHandler(ExceptionHandler $exceptionHandler) {
-		self::$exceptionHandler = $exceptionHandler;
+	public static function init(bool $useIncludePath = true, array $ps4Map = array(), array $classMap = array()) {
+		self::$useIncludePath = $useIncludePath;
+		
+		foreach ($classMap as $className => $classFileName) {
+			if (!is_string($className) || !is_string($classFileName)) {
+				throw new \InvalidArgumentException('Invalid classMap');
+			}
+		}
+		self::$classMap = $classMap;
+		
+		self::$psr4Map = array();
+		foreach (self::$psr4Map as $namespacePrefix => $dirPath) {
+			if (!is_string($namespacePrefix) || !is_string($dirPath) || !isset($namespacePrefix[0])) {
+				throw new \InvalidArgumentException('Invalid ps4Map: ' . $dirPath);
+			}
+			
+			if (!isset(self::$psr4Map[$namespacePrefix[0]])) {
+				self::$psr4Map[$namespacePrefix[0]] = array();
+			}
+			
+			self::$psr4Map[$namespacePrefix[0]][$namespacePrefix] = array('length' => strlen($namespacePrefix),
+					'dirPath' => $dirPath);
+		}
 	}
+	
 	/**
 	 * 
 	 * @param string $typeName
 	 * @throws TypeLoaderErrorException
 	 */
 	public static function load($typeName) {
-		if (!self::$includePaths) return false;
-		
 		try {
 			self::requireScript(self::getFilePathOfTypeWihtoutCheck($typeName), $typeName);
 			return true;
@@ -102,17 +121,17 @@ class TypeLoader {
 		self::loadType($typeName);
 	}
 	
-	public static function loadScript($scriptPath) {
-		$scriptPath = IoUtils::realpath((string) $scriptPath);
-		return self::requireScript($scriptPath, str_replace(DIRECTORY_SEPARATOR, '\\', 
-				mb_substr(trim(self::removeIncludePathOfFilePath($scriptPath), DIRECTORY_SEPARATOR), 0, -strlen(self::SCRIPT_FILE_EXTENSION))));
-	}
+// 	public static function loadScript($scriptPath) {
+// 		$scriptPath = IoUtils::realpath((string) $scriptPath);
+// 		return self::requireScript($scriptPath, str_replace(DIRECTORY_SEPARATOR, '\\', 
+// 				mb_substr(trim(self::removeIncludePathOfFilePath($scriptPath), DIRECTORY_SEPARATOR), 0, -strlen(self::SCRIPT_FILE_EXTENSION))));
+// 	}
 	
-	public static function pathToTypeName($scriptPath) {
-		return ReflectionUtils::qualifyTypeName(mb_substr(
-				trim(self::removeIncludePathOfFilePath($scriptPath), DIRECTORY_SEPARATOR), 
-				0, -strlen(self::SCRIPT_FILE_EXTENSION)));
-	}
+// 	public static function pathToTypeName($scriptPath) {
+// 		return ReflectionUtils::qualifyTypeName(mb_substr(
+// 				trim(self::removeIncludePathOfFilePath($scriptPath), DIRECTORY_SEPARATOR), 
+// 				0, -strlen(self::SCRIPT_FILE_EXTENSION)));
+// 	}
 	
 	private static function requireScript($scriptPath, $typeName) {
 		require_once $scriptPath;
@@ -143,15 +162,18 @@ class TypeLoader {
 		}
 		
 		$dirPaths = array();
-		foreach (self::$includePaths as $includePath) {
+		
+		if (null !== ($ps4Path = $this->buildPs4Path($namespace, ''))) {
+			if (!is_dir($ps4Path)) {
+				$dirPaths[] = $ps4Path;
+			} 
+		}
+		
+		foreach (explode(PATH_SEPARATOR, get_include_path()) as $includePath) {
 			$path = $includePath . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $namespace);
-			
-			if (!is_dir($path)) continue;
-			if (!is_readable($path)) {
-				throw new TypeLoaderErrorException($namespace, 'Can not access directory: ' . $path);
+			if (is_dir($path)) {
+				$dirPaths[] = $path;
 			}
-				
-			$dirPaths[] = $path;
 		}
 		
 		return $dirPaths;
@@ -196,22 +218,63 @@ class TypeLoader {
 	 */
 	private static function getFilePathOfTypeWihtoutCheck($typeName, $fileExt = self::SCRIPT_FILE_EXTENSION) {
 		$typeName = (string) $typeName;
-		$relativeFilePath = str_replace('\\', DIRECTORY_SEPARATOR, $typeName) . $fileExt;
-		$searchPaths = array();
-		foreach (self::$includePaths as $includePath) {
-			$path = $includePath . DIRECTORY_SEPARATOR . $relativeFilePath;
-			$searchPaths[] = $path;
+		
+		$searchedFilePaths = array();
+		
+		if (null !== ($filePath = self::buildPs4Path($typeName, $fileExt))) {
+			$searchedFilePaths[] = $filePath;
 			
-			if (!is_file($path)) continue;
-			if (!is_readable($path)) {
-				throw new TypeLoaderErrorException($typeName, 'Can not access file: ' . $path);
+			if (self::testFile($filePath, $typeName)) {
+				return $filePath;
+			}
+		}
+		
+		if (isset(self::$classMap[$typeName]) && $fileExt === self::SCRIPT_FILE_EXTENSION) {
+			$searchedFilePaths[] = $filePath = self::$classMap[$typeName];
+			
+			if (self::testFile($filePath, $typeName)) {
+				return $filePath;
 			}
 			
-			return $path;
+		}
+		
+		if (false !== ($filePath = stream_resolve_include_path($typeName . $fileExt))) {
+			if (self::testFile($filePath, $typeName)) {
+				return $filePath;
+			}
+		}
+		
+		$relativeFilePath = str_replace('\\', DIRECTORY_SEPARATOR, $typeName) . $fileExt;
+		foreach (explode(PATH_SEPARATOR, get_include_path()) as $includePath) {
+			if (false !== ($realIncludePath = realpath($includePath))) {
+				$includePath = $realIncludePath;
+			}
+			$searchedFilePaths[] = $includePath . DIRECTORY_SEPARATOR . $relativeFilePath;
 		}
 		
 		throw new TypeNotFoundException('Type \'' . $typeName . '\' not found. Paths:' 
-				. implode(PATH_SEPARATOR, $searchPaths));
+				. implode(PATH_SEPARATOR, $searchedFilePaths));
+	}
+	
+	private static function testFile($filePath, $typeName) {
+		if (!is_file($filePath)) return false;
+		
+		if (is_readable($filePath)) return true;
+				
+		throw new TypeLoaderErrorException($typeName, 'Can not access file: ' . $filePath);
+	}
+	
+	private static function buildPs4Path($typeName, $fileExt) {
+		$firstChar = $typeName[0];
+		if (!isset(self::$psr4Map[$firstChar])) return null;
+		
+		foreach (self::$psr4Map[$firstChar] as $namespacePrefix => $ps4Map) {
+			if (0 === strpos($typeName, $namespacePrefix)) {
+				return $ps4Map['dirPath'] . DIRECTORY_SEPARATOR . substr($typeName, $ps4Map['length']) . $fileExt;
+			}
+		}
+			
+		return null;
 	}
 	/**
 	 * 
@@ -225,19 +288,19 @@ class TypeLoader {
 		self::$latestException = null;
 	}
 	
-	public static function isFilePartOfNamespace($filePath, $namepsace) {
-		foreach (self::$includePaths as $includePath) {
-			$path = $includePath . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, (string) $namepsace);
-			if (StringUtils::startsWith($path, $filePath)) return true;
-		}
+// 	public static function isFilePartOfNamespace($filePath, $namepsace) {
+// 		foreach (self::$includePaths as $includePath) {
+// 			$path = $includePath . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, (string) $namepsace);
+// 			if (StringUtils::startsWith($path, $filePath)) return true;
+// 		}
 		
-		return false;
-	}	
+// 		return false;
+// 	}	
 	
 	public static function removeIncludePathOfFilePath($filePath) {
 		foreach (self::$includePaths as $includePath) {
 			if (!StringUtils::startsWith($includePath, $filePath)) continue;
-			return mb_substr($filePath, mb_strlen($includePath));
+			return mb_substr($filePath, strlen($includePath));
 		}
 		
 		throw new FileIsNotPartOfIncludePathException('File path is not part of a include path: '
