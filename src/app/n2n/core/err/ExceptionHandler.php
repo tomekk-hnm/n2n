@@ -733,8 +733,9 @@ class ExceptionHandler {
 // 			$exceptionModel = new ThrowableModel($e, null);
 // 		} else {
 			$exceptionModel = new ThrowableModel($e);
-			$exceptionModel->setOutput($response->fetchBufferedOutput(false));
-			$response->reset();
+			$exceptionModel->setOutputCallback(function () use ($response) {
+				return $response->fetchBufferedOutput(false);
+			});
 // 		}
 
 		
@@ -754,6 +755,7 @@ class ExceptionHandler {
 		
 		$view = N2N::getN2nContext()->lookup(ViewFactory::class)->create($viewName, array('exceptionModel' => $exceptionModel));
 		$view->setControllerContext(new ControllerContext($request->getCmdPath(), $request->getCmdContextPath()));
+		$response->reset();
 		$response->setStatus($status);
 		$response->send($view);
 	}
