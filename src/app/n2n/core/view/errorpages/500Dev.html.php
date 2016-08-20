@@ -21,7 +21,7 @@
 	 */
 
 	use n2n\core\err\ThrowableModel;
-	use n2n\web\ui\view\impl\html\HtmlView;
+	use n2n\impl\web\ui\view\html\HtmlView;
 	use n2n\util\uri\Query;
 	
 	$view = HtmlView::view($this);

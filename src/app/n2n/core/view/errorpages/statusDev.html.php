@@ -22,7 +22,7 @@
 
 	use n2n\core\err\ThrowableModel;
 	use n2n\web\http\Response;
-	use n2n\web\ui\view\impl\html\HtmlView;
+	use n2n\impl\web\ui\view\html\HtmlView;
 	
 	$view = HtmlView::view($this);
 	$html = HtmlView::html($this);

@@ -344,7 +344,7 @@ class AppConfigFactory {
 				
 // 		$persistenceUnitConfigs[] = new PersistenceUnitConfig('default', 
 // 				'mysql:host=127.0.0.1;dbname=hangar', 'root', '', 'SERIALIZABLE', 
-// 				new \ReflectionClass('n2n\persistence\meta\impl\mysql\MysqlDialect'));
+// 				new \ReflectionClass('n2n\impl\persistence\meta\mysql\MysqlDialect'));
 		return new DbConfig($persistenceUnitConfigs);
 	}
 
