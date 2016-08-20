@@ -51,28 +51,34 @@ class TypeLoader {
 		spl_autoload_register('n2n\\core\\TypeLoader::load', true);
 	}
 	
-	public static function init(bool $useIncludePath = true, array $ps4Map = array(), array $classMap = array()) {
-		self::$useIncludePath = $useIncludePath;
-		
-		foreach ($classMap as $className => $classFileName) {
-			if (!is_string($className) || !is_string($classFileName)) {
-				throw new \InvalidArgumentException('Invalid classMap');
+	private static function valStringArray(array $arg, $argName) {
+		foreach ($arg as $value) {
+			if (!is_string($value)) {
+				throw new \InvalidArgumentException('Invalid ' . $argName);
 			}
 		}
+	}
+	
+	public static function init(bool $useIncludePath = true, array $psr4Map = array(), array $classMap = array()) {
+		self::$useIncludePath = $useIncludePath;
+		
+		self::valStringArray($classMap, 'classMap');
 		self::$classMap = $classMap;
 		
 		self::$psr4Map = array();
-		foreach (self::$psr4Map as $namespacePrefix => $dirPath) {
-			if (!is_string($namespacePrefix) || !is_string($dirPath) || !isset($namespacePrefix[0])) {
-				throw new \InvalidArgumentException('Invalid ps4Map: ' . $dirPath);
+		foreach ($psr4Map as $namespacePrefix => $dirPaths) {
+			if (!is_string($namespacePrefix) || !isset($namespacePrefix[0])) {
+				throw new \InvalidArgumentException('Invalid ps4Map');
 			}
+			
+			self::valStringArray($dirPaths, 'classMap');
 			
 			if (!isset(self::$psr4Map[$namespacePrefix[0]])) {
 				self::$psr4Map[$namespacePrefix[0]] = array();
 			}
 			
 			self::$psr4Map[$namespacePrefix[0]][$namespacePrefix] = array('length' => strlen($namespacePrefix),
-					'dirPath' => $dirPath);
+					'dirPaths' => $dirPaths);
 		}
 	}
 	
@@ -163,10 +169,10 @@ class TypeLoader {
 		
 		$dirPaths = array();
 		
-		if (null !== ($ps4Path = $this->buildPs4Path($namespace, ''))) {
-			if (!is_dir($ps4Path)) {
-				$dirPaths[] = $ps4Path;
-			} 
+		foreach ($this->buildPs4Paths($namespace, '') as $ps4Path) {
+			if (!is_dir($ps4Paths)) {
+				$dirPaths[] = $ps4Paths;
+			}
 		}
 		
 		foreach (explode(PATH_SEPARATOR, get_include_path()) as $includePath) {
@@ -221,7 +227,7 @@ class TypeLoader {
 		
 		$searchedFilePaths = array();
 		
-		if (null !== ($filePath = self::buildPs4Path($typeName, $fileExt))) {
+		foreach (self::buildPs4Paths($typeName, $fileExt) as $filePath) {
 			$searchedFilePaths[] = $filePath;
 			
 			if (self::testFile($filePath, $typeName)) {
@@ -264,17 +270,20 @@ class TypeLoader {
 		throw new TypeLoaderErrorException($typeName, 'Can not access file: ' . $filePath);
 	}
 	
-	private static function buildPs4Path($typeName, $fileExt) {
+	private static function buildPs4Paths($typeName, $fileExt) {
 		$firstChar = $typeName[0];
 		if (!isset(self::$psr4Map[$firstChar])) return null;
 		
+		$filePaths = array();
 		foreach (self::$psr4Map[$firstChar] as $namespacePrefix => $ps4Map) {
-			if (0 === strpos($typeName, $namespacePrefix)) {
-				return $ps4Map['dirPath'] . DIRECTORY_SEPARATOR . substr($typeName, $ps4Map['length']) . $fileExt;
+			if (0 !== strpos($typeName, $namespacePrefix)) continue;
+			
+			foreach ($ps4Map['dirPaths'] as $dirPath) {
+				$filePaths[] =  $dirPath . DIRECTORY_SEPARATOR . substr($typeName, $ps4Map['length']) . $fileExt;
 			}
 		}
 			
-		return null;
+		return $filePaths;
 	}
 	/**
 	 * 
