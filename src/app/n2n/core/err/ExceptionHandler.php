@@ -60,6 +60,7 @@ class ExceptionHandler {
 	private $stable = true;
 	private $pendingLogException = array();
 	private $httpFatalExceptionSent = false;
+	private $pendingOutputs = array();
 
 	private $strictAttitude = false;
 	private $logDetailDirPath;
@@ -733,8 +734,12 @@ class ExceptionHandler {
 // 			$exceptionModel = new ThrowableModel($e, null);
 // 		} else {
 			$exceptionModel = new ThrowableModel($e);
-			$exceptionModel->setOutputCallback(function () use ($response) {
-				return $response->fetchBufferedOutput(false);
+			$this->pendingOutputs[] = $response->fetchBufferedOutput(false);
+			$that = $this;
+			$exceptionModel->setOutputCallback(function () use ($that) {
+				$output = implode('', $this->pendingOutputs);
+				$this->pendingOutputs = array();
+				return $output;
 			});
 // 		}
 
@@ -807,7 +812,9 @@ class ExceptionHandler {
 	 */
 	private function fetchObDirty() {
 		$this->stable = false;
-		$output = null;
+		$output = implode('', $this->pendingOutputs);
+		$this->pendingOutputs = array();
+		
 		$numObLevels = ob_get_level();
 		if ($numObLevels) $output = '';
 

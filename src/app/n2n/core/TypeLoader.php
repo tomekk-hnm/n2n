@@ -169,9 +169,9 @@ class TypeLoader {
 		
 		$dirPaths = array();
 		
-		foreach ($this->buildPs4Paths($namespace, '') as $ps4Path) {
-			if (!is_dir($ps4Paths)) {
-				$dirPaths[] = $ps4Paths;
+		foreach ($this->buildPs4Paths($namespace, '') as $psr4Path) {
+			if (!is_dir($psr4Path)) {
+				$dirPaths[] = $psr4Path;
 			}
 		}
 		
