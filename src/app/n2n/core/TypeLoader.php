@@ -272,7 +272,7 @@ class TypeLoader {
 	
 	private static function buildPs4Paths($typeName, $fileExt) {
 		$firstChar = $typeName[0];
-		if (!isset(self::$psr4Map[$firstChar])) return null;
+		if (!isset(self::$psr4Map[$firstChar])) return array();
 		
 		$filePaths = array();
 		foreach (self::$psr4Map[$firstChar] as $namespacePrefix => $ps4Map) {
