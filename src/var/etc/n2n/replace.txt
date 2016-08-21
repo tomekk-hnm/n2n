@@ -18,3 +18,21 @@ n2n/core/N2N.php
 
 n2n\\model
 n2n\context
+
+n2n\\web\\ui\\view\\impl
+n2n\impl\web\ui\view
+
+n2n\\persistence\\orm\\property\\impl
+n2n\impl\persistence\orm\property
+
+n2n\\persistence\\meta\\impl
+n2n\impl\persistence\meta
+
+n2n\\web\\dispatch\\mag\\impl\\model
+n2n\impl\web\dispatch\mag\model
+
+n2n\\web\\dispatch\\property\\impl
+n2n\impl\web\dispatch\property
+
+n2n\\web\\dispatch\\map\\val\\impl
+n2n\impl\web\dispatch\map\val
