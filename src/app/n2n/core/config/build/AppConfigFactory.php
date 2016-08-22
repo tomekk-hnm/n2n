@@ -33,7 +33,7 @@ use n2n\io\fs\FsPath;
 use n2n\util\uri\Url;
 use n2n\core\config\AppConfig;
 use n2n\core\config\GeneralConfig;
-use n2n\core\config\HttpConfig;
+use n2n\core\config\WebConfig;
 use n2n\core\config\MailConfig;
 use n2n\core\config\IoConfig;
 use n2n\core\config\FilesConfig;
@@ -49,7 +49,7 @@ use n2n\web\http\Supersystem;
 
 class AppConfigFactory {
 	const GROUP_GENERAL = 'general';
-	const GROUP_HTTP = 'http';
+	const GROUP_WEB = 'web';
 	const GROUP_ROUTING = 'routing';
 	const GROUP_MAIL = 'mail';
 	const GROUP_IO = 'io';
@@ -68,7 +68,7 @@ class AppConfigFactory {
 	}
 	
 	public function getGroupNames() {
-		return array(self::GROUP_GENERAL, self::GROUP_HTTP, self::GROUP_ROUTING, self::GROUP_MAIL, self::GROUP_IO, 
+		return array(self::GROUP_GENERAL, self::GROUP_WEB, self::GROUP_ROUTING, self::GROUP_MAIL, self::GROUP_IO, 
 				self::GROUP_ERROR, self::GROUP_DATABASE, self::GROUP_ORM, self::GROUP_LOCALES, self::GROUP_L10N, 
 				self::GROUP_PSEUDO_L10N);
 	}
@@ -84,7 +84,7 @@ class AppConfigFactory {
 
 		return new AppConfig(
 				$this->createGeneralConfig($reader->getGroupReaderByGroupName(self::GROUP_GENERAL)),
-				$this->createHttpConfig($reader->getGroupReaderByGroupName(self::GROUP_HTTP),
+				$this->createWebConfig($reader->getGroupReaderByGroupName(self::GROUP_WEB),
 						$reader->getGroupReaderByGroupName(self::GROUP_ROUTING),
 						$reader->getExtendedGroupReadersByGroupName(self::GROUP_ROUTING)),
 				$this->createMailConfig($reader->getGroupReaderByGroupName(self::GROUP_MAIL)),
@@ -146,8 +146,8 @@ class AppConfigFactory {
 	
 	const LOCALE_ALIASES_KEY = 'locale_aliases';
 
-	private function createHttpConfig(GroupReader $groupReader, GroupReader $supersystemGroupReader, array $subsystemGroupReaders) {
-		return new HttpConfig(
+	private function createWebConfig(GroupReader $groupReader, GroupReader $supersystemGroupReader, array $subsystemGroupReaders) {
+		return new WebConfig(
 				$groupReader->getBool(self::RESPONSE_CACHING_ENABLED_KEY, false, 
 						self::RESPONSE_CACHING_ENABLED_DEFAULT),
 				$groupReader->getBool(self::RESPONSE_BROWSER_CACHING_ENABLED_KEY, false, 

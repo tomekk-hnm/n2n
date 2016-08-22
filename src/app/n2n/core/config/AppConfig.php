@@ -37,7 +37,7 @@ class AppConfig {
 	private $l10nConfig;
 	private $pseudoL10nConfig;
 	
-	public function __construct(GeneralConfig $generalConfig, HttpConfig $httpConfig, MailConfig $mailConfig,
+	public function __construct(GeneralConfig $generalConfig, WebConfig $httpConfig, MailConfig $mailConfig,
 			IoConfig $ioConfig, FilesConfig $filesConfig, ErrorConfig $errorConfig, DbConfig $dbConfig, 
 			OrmConfig $ormConfig, N2nLocaleConfig $localeConfig, L10nConfig $l10nConfig, PseudoL10nConfig $pseudoL10nConfig) {
 		$this->generalConfig = $generalConfig;
@@ -59,7 +59,7 @@ class AppConfig {
 		return $this->generalConfig;
 	}
 	/**
-	 * @return \n2n\core\config\HttpConfig
+	 * @return \n2n\core\config\WebConfig
 	 */
 	public function http() {
 		return $this->httpConfig;	

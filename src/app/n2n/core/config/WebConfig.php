@@ -25,7 +25,7 @@ use n2n\web\http\Subsystem;
 use n2n\l10n\N2nLocale;
 use n2n\web\http\Supersystem;
 
-class HttpConfig {
+class WebConfig {
 	private $responseCachingEnabled;
 	private $responseBrowserCachingEnabled; 
 	private $responseSendEtagAllowed;

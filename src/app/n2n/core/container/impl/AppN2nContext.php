@@ -42,7 +42,7 @@ use n2n\web\http\HttpContext;
 use n2n\core\container\AppCache;
 use n2n\util\ex\IllegalStateException;
 use n2n\core\config\GeneralConfig;
-use n2n\core\config\HttpConfig;
+use n2n\core\config\WebConfig;
 use n2n\core\config\MailConfig;
 use n2n\core\config\IoConfig;
 use n2n\core\config\FilesConfig;
@@ -243,7 +243,7 @@ class AppN2nContext implements N2nContext {
 				return $this->appConfig;
 			case GeneralConfig::class:
 				return $this->appConfig->general();
-			case HttpConfig::class:
+			case WebConfig::class:
 				return $this->appConfig->http();
 			case MailConfig::class:
 				return $this->appConfig->mail();

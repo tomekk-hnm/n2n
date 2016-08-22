@@ -36,3 +36,15 @@ n2n\impl\web\dispatch\property
 
 n2n\\web\\dispatch\\map\\val\\impl
 n2n\impl\web\dispatch\map\val
+
+[http]
+[web]
+
+HttpConfig
+WebConfig
+
+GROUP_HTTP
+GROUP_WEB
+
+[http : 
+[web : 
