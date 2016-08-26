@@ -4,7 +4,7 @@
     "description": "The core of n2n framework.",
     "keywords": ["n2n","framework"],
     "homepage": "http://www.n2n.ch",
-    "license": "MIT",
+    "license": "GNU LGPL v3",
     "authors": [
         {
             "name": "Andreas von Burg",

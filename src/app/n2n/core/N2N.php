@@ -320,28 +320,28 @@ class N2N {
 	private static $n2n;
 	private static $shutdownListeners = array();
 	
-	public static function setup(string $publicDirPath, string $varDirPath) {
-		mb_internal_encoding(self::CHARSET);
-// 		ini_set('default_charset', self::CHARSET);
-		
-		self::$exceptionHandler = new ExceptionHandler(N2N::isDevelopmentModeOn());
-		register_shutdown_function(array('n2n\core\N2N', 'shutdown'));
-		
-		self::$n2n = new N2N(new FsPath(IoUtils::realpath($publicDirPath)), 
-				new FsPath(IoUtils::realpath($varDirPath)));
-	}
 	/**
 	 * @param string $publicDirPath
 	 * @param string $varDirPath
 	 * @param array $moduleDirPaths
 	 */
-	public static function initialize(N2nCache $n2nCache, ModuleFactory $moduleFactory = null) {
+	public static function initialize(string $publicDirPath, string $varDirPath, 
+			N2nCache $n2nCache, ModuleFactory $moduleFactory = null) {
+		mb_internal_encoding(self::CHARSET);
+		// 		ini_set('default_charset', self::CHARSET);
+		
+		self::$exceptionHandler = new ExceptionHandler(N2N::isDevelopmentModeOn());
+		register_shutdown_function(array('n2n\core\N2N', 'shutdown'));
+		
+		self::$n2n = new N2N(new FsPath(IoUtils::realpath($publicDirPath)),
+				new FsPath(IoUtils::realpath($varDirPath)));
+				
 		if ($moduleFactory === null) {
 			$moduleFactory = new EtcModuleFactory();
 		}
-		self::_i()->initModules($moduleFactory);
+		self::$n2n->initModules($moduleFactory);
 		
-		self::_i()->init($n2nCache);
+		self::$n2n->init($n2nCache);
 		self::$initialized = true;
 		
 		self::initLogging(self::$n2n);
