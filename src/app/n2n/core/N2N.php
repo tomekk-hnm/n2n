@@ -600,7 +600,7 @@ class N2N {
 	}
 	
 	public static function containsModule($module) {
-		return array_key_exists((string) $module, self::_i()->modules);
+		return self::_i()->getN2nContext()->getModuleManager()->containsModuleNs($module);
 	}
 	
 // 	public static function getModuleByClassName($className) {
