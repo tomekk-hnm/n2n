@@ -244,13 +244,14 @@ class TypeLoader {
 			
 		}
 		
-		if (false !== ($filePath = stream_resolve_include_path($typeName . $fileExt))) {
+		$relativeFilePath = str_replace('\\', DIRECTORY_SEPARATOR, $typeName) . $fileExt;
+		
+		if (false !== ($filePath = stream_resolve_include_path($relativeFilePath))) {
 			if (self::testFile($filePath, $typeName)) {
 				return $filePath;
 			}
 		}
 		
-		$relativeFilePath = str_replace('\\', DIRECTORY_SEPARATOR, $typeName) . $fileExt;
 		foreach (explode(PATH_SEPARATOR, get_include_path()) as $includePath) {
 			if (false !== ($realIncludePath = realpath($includePath))) {
 				$includePath = $realIncludePath;
