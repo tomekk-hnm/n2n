@@ -49,5 +49,8 @@ GROUP_WEB
 [http : 
 [web : 
 
-util\\jquery
-n2nutil\jquery
+ util\\jquery
+ n2nutil\jquery
+
+'util\\jquery'
+'n2nutil\jquery'
