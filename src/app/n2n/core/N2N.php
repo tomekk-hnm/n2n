@@ -28,7 +28,6 @@ use n2n\l10n\MessageContainer;
 use n2n\core\ShutdownListener;
 use n2n\core\module\Module;
 use n2n\core\err\ExceptionHandler;
-use n2n\core\TypeLoader;
 use n2n\core\VarStore;
 use n2n\web\dispatch\DispatchContext;
 use n2n\core\N2nRuntimeException;
