@@ -78,12 +78,14 @@ class TransactionManager extends ObjectAdapter {
 		throw new TransactionStateException('No active transaction.');
 	}
 	
-	public function closeLevel($level, $tRef, $commit) {
+	public function closeLevel($level, $tRef, bool $commit) {
 		if ($this->tRef != $tRef || $level > $this->currentLevel) {
 			throw new TransactionStateException('Transaction is already closed.');
 		}
 		
-		if ($commit === true && $this->rollingBack === true) {
+		if (!$commit) {
+			$this->rollingBack = true;
+		} else if ($this->rollingBack === true) {
 			throw new TransactionStateException(
 					'Transaction cannot be commited because sub transaction was rolled back');
 		}
