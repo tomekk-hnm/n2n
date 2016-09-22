@@ -79,7 +79,7 @@ class N2N {
 	const STAGE_DEVELOPMENT = 'development';
 	const STAGE_TEST = 'test';
 	const STAGE_LIVE = 'live';
-		
+	
 	protected $publicDirPath;
 	protected $varStore;
 	protected $combinedConfigSource;

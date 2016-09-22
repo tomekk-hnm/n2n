@@ -60,14 +60,21 @@ class ModuleManager {
 	 */
 	public function getModuleOfTypeName(string $typeName, bool $required = true) {
 		$typeName = trim($typeName, '\\');
-		foreach ($this->modules as $namespace => $module) {
-			if (StringUtils::startsWith($namespace . '\\', $typeName)) {
-				return $module;
+		
+		$module = null;
+		$nsLength = 0;
+		foreach ($this->modules as $curNamespace => $curModule) {
+			if (!StringUtils::startsWith($curNamespace . '\\', $typeName)) continue;
+			
+			$curNsLength = strlen($curNamespace);
+			if ($curNsLength > $nsLength) {
+				$module = $curModule;
+				$nsLength = $curNsLength;
 			}
 		}
 		
-		if (!$required) return null;
-		
+		if (!$required || $module !== null) return $module;
+				
 		throw new UnknownModuleException('Type is not part of any installed modules: ' . $typeName);
 	}
 	
