@@ -280,7 +280,8 @@ class TypeLoader {
 			if (0 !== strpos($typeName, $namespacePrefix)) continue;
 			
 			foreach ($ps4Map['dirPaths'] as $dirPath) {
-				$filePaths[] =  $dirPath . DIRECTORY_SEPARATOR . substr($typeName, $ps4Map['length']) . $fileExt;
+				$filePaths[] =  $dirPath . DIRECTORY_SEPARATOR 
+						. str_replace('\\', DIRECTORY_SEPARATOR, substr($typeName, $ps4Map['length'])) . $fileExt;
 			}
 		}
 			
