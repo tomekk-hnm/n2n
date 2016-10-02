@@ -32,7 +32,6 @@ use n2n\util\ex\QueryStumble;
 use n2n\reflection\ReflectionUtils;
 use n2n\core\TypeLoader;
 use n2n\web\http\controller\ControllerContext;
-use n2n\core\TypeNotFoundException;
 use n2n\web\ui\ViewFactory;
 
 // define('N2N_EXCEPTION_HANDLING_PHP_SEVERITIES', E_ALL | E_STRICT);
