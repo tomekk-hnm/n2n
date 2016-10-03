@@ -116,7 +116,7 @@ class WebConfig {
 	/**
 	 * @return Subsystem[]
 	 */
-	public function getSubystems(): array {
+	public function getSubsystems(): array {
 		return $this->subsystems;
 	}
 	

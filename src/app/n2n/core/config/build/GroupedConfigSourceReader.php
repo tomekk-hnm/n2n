@@ -87,7 +87,7 @@ class GroupedConfigSourceReader {
 			}
 			
 			if ($this->extendableGroupNames !== null && $groupExtensionName !== null 
-					&& !in_array($groupExtensionName, $this->extendableGroupNames)) {
+					&& !in_array($groupName, $this->extendableGroupNames)) {
 				throw new InvalidConfigurationException('Group \'' . $groupName . '\' can not be extended. ConfigSource: ' 
 						. $configSource);
 			}

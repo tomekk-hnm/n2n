@@ -207,8 +207,8 @@ class AppConfigFactory {
 		$subsystemConfigs = array();
 		foreach ($subsystemGroupReaders as $subsystemName => $subsystemGroupReader) {
 			$subsystemConfigs[$subsystemName] = new Subsystem($subsystemName, 
-					$subsystemGroupReader->getScalar(self::HOST_KEY), 
-					$subsystemGroupReader->getScalar(self::CONTEXT_PATH_KEY),
+					$subsystemGroupReader->getString(self::HOST_KEY, false), 
+					$subsystemGroupReader->getString(self::CONTEXT_PATH_KEY, false),
 					$subsystemGroupReader->getN2nLocaleArray(self::LOCALES_KEY));
 		}
 		return $subsystemConfigs;

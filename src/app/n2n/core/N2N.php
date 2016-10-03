@@ -233,7 +233,7 @@ class N2N {
 
 		$localeFormat = new N2nLocaleFormat($httpConfig->getAliasN2nLocales());
 		$httpContext = new HttpContext($request, $response, $session, $assetsUrl, $localeFormat, 
-				$httpConfig->getSupersystem(), $httpConfig->getSubystems(), $this->n2nContext);
+				$httpConfig->getSupersystem(), $httpConfig->getSubsystems(), $this->n2nContext);
 		
 		$subsystem = $this->detectSubsystem($request->getHostName(), $request->getContextPath());
 		$request->setSubsystem($subsystem);
@@ -273,7 +273,7 @@ class N2N {
 	}
 	
 	private function detectSubsystem($hostName, Path $contextPath) {		
-		foreach ($this->appConfig->http()->getSubystems() as $subsystem) {
+		foreach ($this->appConfig->http()->getSubsystems() as $subsystem) {
 			if (null !== ($subsystemHostName = $subsystem->getHostName())) {
 				if ($hostName != $subsystemHostName) continue;
 			}
