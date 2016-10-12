@@ -296,7 +296,7 @@ class ExceptionHandler {
 // 		$this->checkForPendingLogExceptions();
 		
 		$error = error_get_last();
-
+		
 		if (!isset($error) || $this->lastErrorHash == $this->buildErrorHash($error['type'], $error['file'], $error['line'], $error['message'])) {
 			return;
 		}

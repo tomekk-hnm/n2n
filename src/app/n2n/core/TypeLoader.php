@@ -109,7 +109,7 @@ class TypeLoader {
 	 * @return \ReflectionClass
 	 */
 	public static function loadType($typeName) {
-		return self::requireScript(self::getFilePathOfType($typeName), $typeName);
+		self::requireScript(self::getFilePathOfType($typeName), $typeName);
 	}
 	
 	public static function isTypeLoaded($typeName) {
@@ -146,15 +146,6 @@ class TypeLoader {
 			throw new TypeLoaderErrorException($typeName, 'Missing type \'' . $typeName . '\' in file: '
 					. $scriptPath, 0, E_USER_ERROR, $scriptPath);
 		}
-		
-		$class = new \ReflectionClass($typeName);
-// @todo file casesensitive		
-//		if ($class->getFileName() != $scriptPath) {
-//			throw new TypeLoaderErrorException($typeName, SysTextUtils::get('n2n_error_core_missing_type_in_file',
-//					array('type' => $typeName, 'file' => $scriptPath)), 0, E_USER_ERROR, $scriptPath);
-//		}
-		
-		return $class;
 	}
 	/**
 	 * 
