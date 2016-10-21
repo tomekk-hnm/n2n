@@ -54,3 +54,6 @@ GROUP_WEB
 
 'util\\jquery'
 'n2nutil\jquery'
+
+n2n\\web\\dispatch\\ui\\FormHtmlBuilder
+n2n\impl\web\dispatch\ui\FormHtmlBuilder

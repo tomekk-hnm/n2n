@@ -28,6 +28,7 @@ class ThrowableModel {
 	private $e;
 	private $throwableInfos = array();
 	private $output;
+	private $outputCallback;
 		
 	public function __construct($e) {
 		$this->e = $e;
@@ -78,7 +79,10 @@ class ThrowableModel {
 	
 	public function getOutput() {
 		if ($this->outputCallback !== null) {
-			return $this->outputCallback->__invoke();
+			$this->output = $this->outputCallback->__invoke();
+			$this->outputCallback = null;
 		}
+		
+		return $this->output;
 	}
 }
