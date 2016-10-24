@@ -45,13 +45,13 @@ class TypeLoader {
 	 * @param string $includePath
 	 * @param string $moduleIncludePath
 	 */
-	public static function register(bool $useIncludePath = true, array $psr4Map = array(), array $classMap = array()) {
+	public static function register(bool $useIncludePath = true, array $psr4Map = array(), array &$classMap = array()) {
 		self::init($useIncludePath, $psr4Map, $classMap);
 		
 		spl_autoload_register('n2n\\core\\TypeLoader::load', true);
 	}
 	
-	private static function valStringArray(array $arg, $argName) {
+	private static function valStringArray(array &$arg, $argName) {
 		foreach ($arg as $value) {
 			if (!is_string($value)) {
 				throw new \InvalidArgumentException('Invalid ' . $argName);
@@ -59,11 +59,11 @@ class TypeLoader {
 		}
 	}
 	
-	public static function init(bool $useIncludePath = true, array $psr4Map = array(), array $classMap = array()) {
+	public static function init(bool $useIncludePath = true, array $psr4Map = array(), array &$classMap = array()) {
 		self::$useIncludePath = $useIncludePath;
 		
 		self::valStringArray($classMap, 'classMap');
-		self::$classMap = $classMap;
+		self::$classMap = &$classMap;
 		
 		self::$psr4Map = array();
 		foreach ($psr4Map as $namespacePrefix => $dirPaths) {
