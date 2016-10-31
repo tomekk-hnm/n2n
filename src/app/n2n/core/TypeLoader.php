@@ -94,7 +94,7 @@ class TypeLoader {
 		} catch (TypeNotFoundException $e) {
 			$lutp = N2N::getLastUserTracePoint();
 			self::$latestException = new TypeLoaderErrorException($typeName, $e->getMessage(), 0, 
-					E_ERROR, $lutp['file'], $lutp['line']);
+					E_ERROR, $lutp['file'], $lutp['line'], $e);
 			return false;
 		} /*catch (\Exception $e) {
 			self::$exceptionHandler->handleThrowable($e);
