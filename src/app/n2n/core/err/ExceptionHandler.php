@@ -728,14 +728,14 @@ class ExceptionHandler {
 			$status = Response::STATUS_500_INTERNAL_SERVER_ERROR;
 		}
 		
-		$exceptionModel = null;
+		$throwableModel = null;
 // 		if ($e instanceof StatusException && isset($viewName)) {
-// 			$exceptionModel = new ThrowableModel($e, null);
+// 			$throwableModel = new ThrowableModel($e, null);
 // 		} else {
-			$exceptionModel = new ThrowableModel($e);
+			$throwableModel = new ThrowableModel($e);
 			$this->pendingOutputs[] = $response->fetchBufferedOutput(false);
 			$that = $this;
-			$exceptionModel->setOutputCallback(function () use ($that) {
+			$throwableModel->setOutputCallback(function () use ($that) {
 				$output = implode('', $this->pendingOutputs);
 				$this->pendingOutputs = array();
 				return $output;
@@ -757,7 +757,7 @@ class ExceptionHandler {
 			}	
 		}
 		
-		$view = N2N::getN2nContext()->lookup(ViewFactory::class)->create($viewName, array('exceptionModel' => $exceptionModel));
+		$view = N2N::getN2nContext()->lookup(ViewFactory::class)->create($viewName, array('throwableModel' => $throwableModel));
 		$view->setControllerContext(new ControllerContext($request->getCmdPath(), $request->getCmdContextPath()));
 		$response->reset();
 		$response->setStatus($status);
