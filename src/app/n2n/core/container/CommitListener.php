@@ -21,29 +21,15 @@
  */
 namespace n2n\core\container;
 
-/**
- * Each method gets called two times.
- *
- */
-interface TransactionalResource {
-	/**
-	 * @param Transaction $transaction
-	 */
-	public function beginTransaction(Transaction $transaction);
-	
-	/**
-	 * @param Transaction $transaction
-	 * @return boolean if ok true, failed causes the transaction to roll back
-	 */
-	public function prepareCommit(Transaction $transaction): bool;
-	
-	/**
-	 * @param Transaction $transaction
-	 */	
-	public function commit(Transaction $transaction);
+interface CommitListener {
 	
 	/**
 	 * @param Transaction $transaction
 	 */
-	public function rollBack(Transaction $transaction);
+	public function preCommit(Transaction $transaction);
+	
+	/**
+	 * @param Transaction $transaction
+	 */
+	public function postCommit(Transaction $transaction);
 }

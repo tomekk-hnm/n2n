@@ -25,6 +25,7 @@ use n2n\reflection\ObjectAdapter;
 
 class TransactionManager extends ObjectAdapter {
 	private $transactionalResources = array();
+	private $commitListeners = array();
 	private $tRef = 1;
 	
 	private $rootTransaction = null;
@@ -141,8 +142,16 @@ class TransactionManager extends ObjectAdapter {
 	private function commit() {
 		$this->tRef++;
 		
+		foreach ($this->commitListeners as $commitListener) {
+			$commitListener->preCommit($this->rootTransaction);
+		}
+		
 		foreach ($this->transactionalResources as $resource) {
 			$resource->commit($this->rootTransaction);
+		}
+		
+		foreach ($this->commitListeners as $commitListener) {
+			$commitListener->postCommit($this->rootTransaction);
 		}
 	}
 
@@ -164,5 +173,13 @@ class TransactionManager extends ObjectAdapter {
 
 	public function unregisterResource(TransactionalResource $resource) {
 		unset($this->transactionalResources[spl_object_hash($resource)]);
+	}
+	
+	public function registerCommitListener(CommitListener $commitListener) {
+		$this->commitListeners[spl_object_hash($commitListener)] = $commitListener;
+	}
+	
+	public function unregisterCommitListener(CommitListener $commitListener) {
+		unset($this->commitListeners[spl_object_hash($commitListener)]);
 	}
 }
