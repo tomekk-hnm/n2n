@@ -26,7 +26,7 @@ use n2n\l10n\PseudoL10nConfig;
 
 class AppConfig {
 	private $generalConfig;
-	private $httpConfig;
+	private $webConfig;
 	private $mailConfig;
 	private $ioConfig;
 	private $filesConfig;
@@ -37,11 +37,11 @@ class AppConfig {
 	private $l10nConfig;
 	private $pseudoL10nConfig;
 	
-	public function __construct(GeneralConfig $generalConfig, WebConfig $httpConfig, MailConfig $mailConfig,
+	public function __construct(GeneralConfig $generalConfig, WebConfig $webConfig, MailConfig $mailConfig,
 			IoConfig $ioConfig, FilesConfig $filesConfig, ErrorConfig $errorConfig, DbConfig $dbConfig, 
 			OrmConfig $ormConfig, N2nLocaleConfig $localeConfig, L10nConfig $l10nConfig, PseudoL10nConfig $pseudoL10nConfig) {
 		$this->generalConfig = $generalConfig;
-		$this->httpConfig = $httpConfig;
+		$this->webConfig = $webConfig;
 		$this->mailConfig = $mailConfig;
 		$this->ioConfig = $ioConfig;
 		$this->filesConfig = $filesConfig;
@@ -61,8 +61,8 @@ class AppConfig {
 	/**
 	 * @return \n2n\core\config\WebConfig
 	 */
-	public function http() {
-		return $this->httpConfig;	
+	public function web() {
+		return $this->webConfig;	
 	}
 	/**
 	 * @return \n2n\core\config\MailConfig
