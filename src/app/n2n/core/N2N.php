@@ -65,7 +65,7 @@ use n2n\core\module\impl\EtcModuleFactory;
 define('N2N_CRLF', "\r\n");
 
 class N2N {
-	const VERSION = '7.1.8';
+	const VERSION = '7.1.9';
 	const LOG4PHP_CONFIG_FILE = 'log4php.xml'; 
 	const LOG_EXCEPTION_DETAIL_DIR = 'exceptions';
 	const LOG_ERR_FILE = 'err.log';
@@ -298,13 +298,13 @@ class N2N {
 // 		}
 		
 // 		if (N2N::isHttpContextAvailable()) {
-// 			$httpConfig = $this->appConfig->web();
+// 			$webConfig = $this->appConfig->web();
 		
 // 			$this->contextControllerRegistry = new ControllerRegistry();
-// 			foreach ($httpConfig->getFilterControllerDefs() as $contextControllerDef) {
+// 			foreach ($webConfig->getFilterControllerDefs() as $contextControllerDef) {
 // 				$this->contextControllerRegistry->registerFilterControllerDef($contextControllerDef);
 // 			}
-// 			foreach ($httpConfig->getMainControllerDefs() as $contextControllerDef) {
+// 			foreach ($webConfig->getMainControllerDefs() as $contextControllerDef) {
 // 				$this->contextControllerRegistry->registerMainControllerDef($contextControllerDef);
 // 			}
 // 			foreach ($this->appConfig->locale()->getN2nLocales() as $alias => $n2nLocale) {

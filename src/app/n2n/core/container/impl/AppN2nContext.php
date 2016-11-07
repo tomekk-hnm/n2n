@@ -244,7 +244,7 @@ class AppN2nContext implements N2nContext {
 			case GeneralConfig::class:
 				return $this->appConfig->general();
 			case WebConfig::class:
-				return $this->appConfig->we();
+				return $this->appConfig->web();
 			case MailConfig::class:
 				return $this->appConfig->mail();
 			case IoConfig::class:
