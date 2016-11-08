@@ -32,4 +32,6 @@ interface CommitListener {
 	 * @param Transaction $transaction
 	 */
 	public function postCommit(Transaction $transaction);
+	
+	public function commitFailed(Transaction $transaction, CommitFailedException $e);
 }

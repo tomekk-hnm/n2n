@@ -39,6 +39,7 @@ interface TransactionalResource {
 	
 	/**
 	 * @param Transaction $transaction
+	 * @throws CommitFailedException
 	 */	
 	public function commit(Transaction $transaction);
 	

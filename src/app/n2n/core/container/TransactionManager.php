@@ -91,7 +91,7 @@ class TransactionManager extends ObjectAdapter {
 					'Transaction cannot be commited because sub transaction was rolled back');
 		}
 
-		foreach ($this->transactions as $tlevel => $transaction) {
+		foreach (array_keys($this->transactions) as $tlevel) {
 			if ($level > $tlevel) continue;
 			
 			unset($this->transactions[$tlevel]);
@@ -146,8 +146,26 @@ class TransactionManager extends ObjectAdapter {
 			$commitListener->preCommit($this->rootTransaction);
 		}
 		
-		foreach ($this->transactionalResources as $resource) {
-			$resource->commit($this->rootTransaction);
+		try {
+			foreach ($this->transactionalResources as $resource) {
+				$resource->commit($this->rootTransaction);
+			}
+		} catch (CommitFailedException $e) {
+			$tsm = array();
+			foreach ($this->commitListeners as $commitListener) {
+				try {
+					$commitListener->commitFailed($this->rootTransaction, $e);
+				} catch (\Throwable $t) {
+					$tsm[] = get_class($t) . ': ' . $t->getMessage();
+				}
+			}
+			
+			if (empty($tsm)) {
+				throw $e;
+			}
+			
+			throw new CommitFailedException('Commit failed with CommitListener exceptions: ' . implode(', ', $tsm), 
+					0, $e);
 		}
 		
 		foreach ($this->commitListeners as $commitListener) {
