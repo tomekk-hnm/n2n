@@ -22,8 +22,8 @@
 namespace n2n\core\err;
 
 class ThrowableModel {
-	const N2N_DOCUMENTATION_URL = 'http://support.web.n2n.ch/';
-	const EXCEPTION_DOCUMENTATION_URL = 'http://support.web.n2n.ch/e';
+	const N2N_DOCUMENTATION_URL = 'https://dev.n2n.rocks/';
+	const EXCEPTION_DOCUMENTATION_URL = 'https://dev.n2n.rocks/e';
 	
 	private $e;
 	private $throwableInfos = array();
