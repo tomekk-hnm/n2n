@@ -28,8 +28,8 @@
 	$html = HtmlView::html($this);
 	$response = HtmlView::response($this);
 	
-	$exceptionModel = $view->getParam('exceptionModel'); 
-	$view->assert($exceptionModel instanceof ThrowableModel);
+	$throwableModel = $view->getParam('throwableModel'); 
+	$view->assert($throwableModel instanceof ThrowableModel);
 
 	$httpStatus = $response->getStatus();
 	$title = $httpStatus . ' ' . Response::textOfStatusCode($httpStatus);

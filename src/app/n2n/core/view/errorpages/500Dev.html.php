@@ -28,12 +28,12 @@
 	$html = HtmlView::html($this);
 	$request = HtmlView::request($this);
 	
-	$exceptionModel = $view->getParam('exceptionModel'); 
-	$view->assert($exceptionModel instanceof ThrowableModel);
+	$throwableModel = $view->getParam('throwableModel'); 
+	$view->assert($throwableModel instanceof ThrowableModel);
 
-	$html->meta()->setTitle($exceptionModel->getTitle());
+	$html->meta()->setTitle($throwableModel->getTitle());
 	
-	$throwableInfos = $exceptionModel->getThrowableInfos();
+	$throwableInfos = $throwableModel->getThrowableInfos();
 	
 	$html->meta()->addJs('js/jquery-2.1.4.min.js');
 	$html->meta()->addJs('js/exceptionhandler.js');
@@ -57,9 +57,9 @@
 	<?php $html->bodyStart() ?>
 		<div id="container">
 			<div id="intro">
-				<h1><i class="fa fa-exclamation-triangle"></i><?php $html->esc($exceptionModel->getTitle()) ?></h1>
+				<h1><i class="fa fa-exclamation-triangle"></i><?php $html->esc($throwableModel->getTitle()) ?></h1>
 				<ul id="help-nav">
-					<?php if (count($documentIds = $exceptionModel->getDocumentIds()) > 0): ?>
+					<?php if (count($documentIds = $throwableModel->getDocumentIds()) > 0): ?>
 						<li>
 							<?php $html->linkStart(ThrowableModel::EXCEPTION_DOCUMENTATION_URL . '?' 
 									. Query::create(array('ids' => $documentIds)), array('target' => '_blank')) ?>
@@ -88,7 +88,7 @@
 									<?php endif ?>
 								</li>
 							<?php endforeach ?>
-							<?php if (0 < mb_strlen($output = $exceptionModel->getOutput())): ?>
+							<?php if (0 < mb_strlen($output = $throwableModel->getOutput())): ?>
 								<li class="exception-link">
 									<?php $html->link('#output', 'Output') ?>
 								</li>
@@ -183,7 +183,7 @@
 					</div>
 				<?php endforeach ?>
 				
-				<?php if (0 < mb_strlen($output = $exceptionModel->getOutput())): ?>
+				<?php if (0 < mb_strlen($output = $throwableModel->getOutput())): ?>
 					<div id="output" class="output">
 						<h2>Output</h2>
 						<div class="code">

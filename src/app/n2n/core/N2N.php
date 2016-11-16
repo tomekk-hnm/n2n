@@ -65,7 +65,7 @@ use n2n\core\module\impl\EtcModuleFactory;
 define('N2N_CRLF', "\r\n");
 
 class N2N {
-	const VERSION = '7.1.8';
+	const VERSION = '7.1.9';
 	const LOG4PHP_CONFIG_FILE = 'log4php.xml'; 
 	const LOG_EXCEPTION_DETAIL_DIR = 'exceptions';
 	const LOG_ERR_FILE = 'err.log';
@@ -212,7 +212,7 @@ class N2N {
 		if (!isset($_SERVER['REQUEST_URI'])) return null;
 		
 		$generalConfig = $this->appConfig->general();
-		$httpConfig = $this->appConfig->http();
+		$webConfig = $this->appConfig->web();
 		$filesConfig = $this->appConfig->files();
 		
 		$request = new VarsRequest($_SERVER, $_GET, $_POST, $_FILES); 
@@ -220,25 +220,25 @@ class N2N {
 		$session = new Session($generalConfig->getApplicationName());
 		
 		$response = new Response($request);
-		$response->setResponseCachingEnabled($httpConfig->isResponseCachingEnabled());
+		$response->setResponseCachingEnabled($webConfig->isResponseCachingEnabled());
 		$response->setResponseCacheStore($this->n2nContext->lookup(ResponseCacheStore::class));
-		$response->setHttpCachingEnabled($httpConfig->isResponseBrowserCachingEnabled());
-		$response->setSendEtagAllowed($httpConfig->isResponseSendEtagAllowed());
-		$response->setSendLastModifiedAllowed($httpConfig->isResponseSendLastModifiedAllowed());
+		$response->setHttpCachingEnabled($webConfig->isResponseBrowserCachingEnabled());
+		$response->setSendEtagAllowed($webConfig->isResponseSendEtagAllowed());
+		$response->setSendLastModifiedAllowed($webConfig->isResponseSendLastModifiedAllowed());
 		
 		$assetsUrl = $filesConfig->getAssetsUrl();
 		if ($assetsUrl->isRelative() && !$assetsUrl->getPath()->hasLeadingDelimiter()) {
 			$assetsUrl = $request->getContextPath()->toUrl()->ext($assetsUrl);
 		}
 
-		$localeFormat = new N2nLocaleFormat($httpConfig->getAliasN2nLocales());
+		$localeFormat = new N2nLocaleFormat($webConfig->getAliasN2nLocales());
 		$httpContext = new HttpContext($request, $response, $session, $assetsUrl, $localeFormat, 
-				$httpConfig->getSupersystem(), $httpConfig->getSubsystems(), $this->n2nContext);
+				$webConfig->getSupersystem(), $webConfig->getSubsystems(), $this->n2nContext);
 		
 		$subsystem = $this->detectSubsystem($request->getHostName(), $request->getContextPath());
 		$request->setSubsystem($subsystem);
 		
-		$n2nLocales = $httpConfig->getSupersystem()->getN2nLocales();
+		$n2nLocales = $webConfig->getSupersystem()->getN2nLocales();
 		if ($subsystem !== null) {
 			$n2nLocales = array_merge($n2nLocales, $subsystem->getN2nLocales());
 		}
@@ -273,7 +273,7 @@ class N2N {
 	}
 	
 	private function detectSubsystem($hostName, Path $contextPath) {		
-		foreach ($this->appConfig->http()->getSubsystems() as $subsystem) {
+		foreach ($this->appConfig->web()->getSubsystems() as $subsystem) {
 			if (null !== ($subsystemHostName = $subsystem->getHostName())) {
 				if ($hostName != $subsystemHostName) continue;
 			}
@@ -298,13 +298,13 @@ class N2N {
 // 		}
 		
 // 		if (N2N::isHttpContextAvailable()) {
-// 			$httpConfig = $this->appConfig->http();
+// 			$webConfig = $this->appConfig->web();
 		
 // 			$this->contextControllerRegistry = new ControllerRegistry();
-// 			foreach ($httpConfig->getFilterControllerDefs() as $contextControllerDef) {
+// 			foreach ($webConfig->getFilterControllerDefs() as $contextControllerDef) {
 // 				$this->contextControllerRegistry->registerFilterControllerDef($contextControllerDef);
 // 			}
-// 			foreach ($httpConfig->getMainControllerDefs() as $contextControllerDef) {
+// 			foreach ($webConfig->getMainControllerDefs() as $contextControllerDef) {
 // 				$this->contextControllerRegistry->registerMainControllerDef($contextControllerDef);
 // 			}
 // 			foreach ($this->appConfig->locale()->getN2nLocales() as $alias => $n2nLocale) {

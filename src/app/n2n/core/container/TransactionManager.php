@@ -25,6 +25,7 @@ use n2n\reflection\ObjectAdapter;
 
 class TransactionManager extends ObjectAdapter {
 	private $transactionalResources = array();
+	private $commitListeners = array();
 	private $tRef = 1;
 	
 	private $rootTransaction = null;
@@ -90,7 +91,7 @@ class TransactionManager extends ObjectAdapter {
 					'Transaction cannot be commited because sub transaction was rolled back');
 		}
 
-		foreach ($this->transactions as $tlevel => $transaction) {
+		foreach (array_keys($this->transactions) as $tlevel) {
 			if ($level > $tlevel) continue;
 			
 			unset($this->transactions[$tlevel]);
@@ -141,8 +142,34 @@ class TransactionManager extends ObjectAdapter {
 	private function commit() {
 		$this->tRef++;
 		
-		foreach ($this->transactionalResources as $resource) {
-			$resource->commit($this->rootTransaction);
+		foreach ($this->commitListeners as $commitListener) {
+			$commitListener->preCommit($this->rootTransaction);
+		}
+		
+		try {
+			foreach ($this->transactionalResources as $resource) {
+				$resource->commit($this->rootTransaction);
+			}
+		} catch (CommitFailedException $e) {
+			$tsm = array();
+			foreach ($this->commitListeners as $commitListener) {
+				try {
+					$commitListener->commitFailed($this->rootTransaction, $e);
+				} catch (\Throwable $t) {
+					$tsm[] = get_class($t) . ': ' . $t->getMessage();
+				}
+			}
+			
+			if (empty($tsm)) {
+				throw $e;
+			}
+			
+			throw new CommitFailedException('Commit failed with CommitListener exceptions: ' . implode(', ', $tsm), 
+					0, $e);
+		}
+		
+		foreach ($this->commitListeners as $commitListener) {
+			$commitListener->postCommit($this->rootTransaction);
 		}
 	}
 
@@ -164,5 +191,13 @@ class TransactionManager extends ObjectAdapter {
 
 	public function unregisterResource(TransactionalResource $resource) {
 		unset($this->transactionalResources[spl_object_hash($resource)]);
+	}
+	
+	public function registerCommitListener(CommitListener $commitListener) {
+		$this->commitListeners[spl_object_hash($commitListener)] = $commitListener;
+	}
+	
+	public function unregisterCommitListener(CommitListener $commitListener) {
+		unset($this->commitListeners[spl_object_hash($commitListener)]);
 	}
 }
