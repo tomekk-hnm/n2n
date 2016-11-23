@@ -45,7 +45,7 @@ class TypeLoader {
 	 * @param string $includePath
 	 * @param string $moduleIncludePath
 	 */
-	public static function register(bool $useIncludePath = true, array $psr4Map = array(), array &$classMap = array()) {
+	public static function register(bool $useIncludePath = true, array $psr4Map = array(), array $classMap = array()) {
 		self::init($useIncludePath, $psr4Map, $classMap);
 		
 		spl_autoload_register('n2n\\core\\TypeLoader::load', true);
