@@ -25,6 +25,9 @@ n2n\impl\web\ui\view
 n2n\\persistence\\orm\\property\\impl
 n2n\impl\persistence\orm\property
 
+n2n\\\\persistence\\\\orm\\\\property\\\\impl
+n2n\\impl\\persistence\\orm\\property
+
 n2n\\persistence\\meta\\impl
 n2n\impl\persistence\meta
 
