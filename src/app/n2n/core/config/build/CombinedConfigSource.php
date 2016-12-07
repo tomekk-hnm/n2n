@@ -24,6 +24,7 @@ namespace n2n\core\config\build;
 use n2n\util\config\source\ConfigSource;
 use n2n\util\config\ConfigurationConflictException;
 use n2n\util\config\InvalidConfigurationException;
+use n2n\util\config\ConfigProperty;
 
 class CombinedConfigSource implements ConfigSource {
 	private $mainConfigSource;

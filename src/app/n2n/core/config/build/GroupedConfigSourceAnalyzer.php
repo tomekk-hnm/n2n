@@ -22,6 +22,7 @@
 namespace n2n\core\config\build;
 
 use n2n\util\config\source\ConfigSource;
+use n2n\util\config\InvalidConfigurationException;
 
 class GroupedConfigSourceAnalyzer {
 	private $configSource;
@@ -43,12 +44,12 @@ class GroupedConfigSourceAnalyzer {
 		
 			if ($numGroupExpressionParts > 2) {
 				throw new InvalidConfigurationException('Group name must be conform to pattern \'{group}:{stage}\', \'' 
-						. $groupExpression . '\' given in ConfigSource: ' . $this->configSourceName);
+						. $groupExpression . '\' given in ConfigSource: ' . $this->configSource);
 			}
 				
 			if ($numGroupExpressionParts > 1) {
 				$stage = trim($groupExpressionParts[1]);
-				$this->stage[$stage] = $stage;
+				$this->stages[$stage] = $stage;
 			}
 	
 			$groupName = trim($groupExpressionParts[0]);

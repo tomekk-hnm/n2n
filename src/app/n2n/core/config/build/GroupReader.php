@@ -26,7 +26,7 @@ use n2n\util\config\AttributesException;
 use n2n\l10n\N2nLocale;
 use n2n\l10n\IllegalN2nLocaleFormatException;
 use n2n\io\IoUtils;
-use n2n\util\InvalidAttributeException;
+use n2n\util\config\InvalidAttributeException;
 
 class GroupReader {
 	private $groupName;
