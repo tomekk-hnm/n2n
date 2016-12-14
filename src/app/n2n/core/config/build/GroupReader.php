@@ -189,7 +189,7 @@ class GroupReader {
 					new InvalidAttributeException('String must not contain any special chars.'));
 		}
 		
-		return $defaultValue;
+		return $str;
 	}
 
 	public function getInt(string $attributeName, bool $mandatory, $defaultValue = null) {
