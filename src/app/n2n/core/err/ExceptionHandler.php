@@ -565,9 +565,9 @@ class ExceptionHandler {
 				$boundValuesStr = "";
 				foreach($e->getBoundValues() as $name => $value) {
 					if (!mb_strlen($boundValuesStr)) $boundValuesStr .= ', ';
-					$boundValuesStr .= $name . '=' . ReflectionUtils::buildScalar($value);
+					$boundValuesStr .= $name . '=' . ReflectionUtils::buildScalar($value) . PHP_EOL;
 				}
-				$debugContent .= 'Bound values: ' . $boundValuesStr . PHP_EOL . PHP_EOL;
+				$debugContent .= 'Bound values: ' . $boundValuesStr . PHP_EOL;
 			}
 		}
 		
