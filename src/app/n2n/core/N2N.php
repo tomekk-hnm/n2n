@@ -486,7 +486,7 @@ class N2N {
 	 * @return \n2n\l10n\N2nLocale[]
 	 */
 	public static function getN2nLocales() {
-		return self::_i()->n2nLocales;
+		return self::_i()->appConfig->web()->getAllN2nLocales();
 	}
 	/**
 	 * 
