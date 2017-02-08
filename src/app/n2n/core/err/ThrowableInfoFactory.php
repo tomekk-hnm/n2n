@@ -87,6 +87,14 @@ class ThrowableInfoFactory {
 			$filePath = $fmatches[0];
 			$lineNo = $lmatches[0];
 		}
+		
+		$fmatches = array();
+		$lmatches = array();
+		if (preg_match('/(?<=passed in )[^ \(]+/', $message, $fmatches)
+				&& preg_match('/((?<=on line )|(?<=\())[0-9]+/', $message, $lmatches)) {
+			$filePath = $fmatches[0];
+			$lineNo = $lmatches[0];
+		}
 	}
 	
 	private static function applyCodeInfo(ThrowableInfo $throwableInfo, \Error $e) {
