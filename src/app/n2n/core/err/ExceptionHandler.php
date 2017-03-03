@@ -202,30 +202,30 @@ class ExceptionHandler {
 	 * @throws PHPErrorException
 	 * @return boolean
 	 */
-	public function handleTriggeredError($errno, $errstr, $errfile, $errline) {
+	public function handleTriggeredError($errno, $errstr, $errfile, $errline, $forceThrow = false) {
 		$this->lastErrorHash = $this->buildErrorHash($errno, $errfile, $errline, $errstr);
 		$ignoredNextTriggeredErrNo = $this->ignoredNextTriggeredErrNo;
 		$this->ignoredNextTriggeredErrNo = 0;
 		
-		if ($ignoredNextTriggeredErrNo & $errno) {
+		if (!$forceThrow && $ignoredNextTriggeredErrNo & $errno) {
 			$this->ignoredErrorMessage = $errstr;
 			return true;
 		}
-		
+
 		if ($this->isMemoryLimitExhaustedMessage($errstr)) {
 			// @todo find out if dangerous
 			//$this->stable = false;
 		} else {
 			// @ --> error_reporting() == false
-			if (!error_reporting()) return false;
+			if (!$forceThrow && !error_reporting()) return false;
 		}
-	
+		
 		$e = $this->createPhpError($errno, $errstr, $errfile, $errline);
 		$e = $this->checkForTypeLoaderThrowable($e);
 	
 		$this->log($e);
 		
-		if ($this->strictAttitude || !($errno & self::STRICT_ATTITUTE_PHP_SEVERITIES)) {
+		if ($forceThrow || $this->strictAttitude || !($errno & self::STRICT_ATTITUTE_PHP_SEVERITIES)) {
 			throw $e;
 		}
 	
@@ -300,17 +300,17 @@ class ExceptionHandler {
 		if (!isset($error) || $this->lastErrorHash == $this->buildErrorHash($error['type'], $error['file'], $error['line'], $error['message'])) {
 			return;
 		}
-
+		
 // 		if ($error['type'] == E_WARNING && substr($error['message'], 0, 23) == 'DateTime::__construct()') {
 // 			return;
 // 		}
 		
-		if ($error['type'] & self::STRICT_ATTITUTE_PHP_SEVERITIES) {
-			return;
-		}
+// 		if (!$this->strictAttitude || ($error['type'] & self::STRICT_ATTITUTE_PHP_SEVERITIES)) {
+// 			return;
+// 		}
 		
 		try {
-			$this->handleTriggeredError($error['type'], $error['message'], $error['file'], $error['line']);
+			$this->handleTriggeredError($error['type'], $error['message'], $error['file'], $error['line'], true);
 		} catch (\Throwable $e) {
 			$this->dispatchException($e);
 		}
