@@ -55,7 +55,7 @@ class ExceptionHandler {
 	
 	private $dispatchingThrowables = array();
 	private $loggedExceptions = 0;
-	private $lastErrorHash = null;
+	private $errorHashes = array();
 	private $stable = true;
 	private $pendingLogException = array();
 	private $httpFatalExceptionSent = false;
@@ -187,8 +187,10 @@ class ExceptionHandler {
 	
 	public function getIgnoredErrorMessage() {
 		return $this->ignoredErrorMessage;
-	}
-		
+	} 
+	
+	private $foreceThrow = false;
+	
 	/**
 	 * <p>Will be registered as php error_handler while ExceptionHandler initialization
 	 * {@link http://php.net/manual/de/function.set-error-handler.php}</p>
@@ -202,12 +204,13 @@ class ExceptionHandler {
 	 * @throws PHPErrorException
 	 * @return boolean
 	 */
-	public function handleTriggeredError($errno, $errstr, $errfile, $errline, $forceThrow = false) {
-		$this->lastErrorHash = $this->buildErrorHash($errno, $errfile, $errline, $errstr);
+	public function handleTriggeredError($errno, $errstr, $errfile, $errline) {
+		
+		$this->registerError($errno, $errfile, $errline, $errstr);
 		$ignoredNextTriggeredErrNo = $this->ignoredNextTriggeredErrNo;
 		$this->ignoredNextTriggeredErrNo = 0;
 		
-		if (!$forceThrow && $ignoredNextTriggeredErrNo & $errno) {
+		if (!$this->forceThrow && $ignoredNextTriggeredErrNo & $errno) {
 			$this->ignoredErrorMessage = $errstr;
 			return true;
 		}
@@ -217,7 +220,7 @@ class ExceptionHandler {
 			//$this->stable = false;
 		} else {
 			// @ --> error_reporting() == false
-			if (!$forceThrow && !error_reporting()) return false;
+			if (!$this->forceThrow && !error_reporting()) return false;
 		}
 		
 		$e = $this->createPhpError($errno, $errstr, $errfile, $errline);
@@ -225,7 +228,7 @@ class ExceptionHandler {
 	
 		$this->log($e);
 		
-		if ($forceThrow || $this->strictAttitude || !($errno & self::STRICT_ATTITUTE_PHP_SEVERITIES)) {
+		if ($this->forceThrow || $this->strictAttitude || !($errno & self::STRICT_ATTITUTE_PHP_SEVERITIES)) {
 			throw $e;
 		}
 	
@@ -271,7 +274,7 @@ class ExceptionHandler {
 		}
 		
 		if ($this->detectBadRequestsOnStartupEnabled && $this->isPrevBadRequestMessage($this->prevError['message'])) {
-			$this->lastErrorHash = $this->buildErrorHash($this->prevError['type'], $this->prevError['file'], 
+			$this->registerError($this->prevError['type'], $this->prevError['file'], 
 					$this->prevError['line'], $this->prevError['message']);
 			$e = $this->createPhpError($this->prevError['type'], $this->prevError['message'], 
 					$this->prevError['file'], $this->prevError['line']);
@@ -282,7 +285,7 @@ class ExceptionHandler {
 			$this->handleTriggeredError($this->prevError['type'], $this->prevError['message'], 
 					$this->prevError['file'], $this->prevError['line']);
 		} else {
-			$this->lastErrorHash = $this->buildErrorHash($this->prevError['type'], $this->prevError['file'],
+			$this->registerError($this->prevError['type'], $this->prevError['file'],
 					$this->prevError['line'], $this->prevError['message']);
 		}
 	}
@@ -297,10 +300,10 @@ class ExceptionHandler {
 		
 		$error = error_get_last();
 		
-		if (!isset($error) || $this->lastErrorHash == $this->buildErrorHash($error['type'], $error['file'], $error['line'], $error['message'])) {
+		if (!isset($error) || $this->checkForError($error['type'], $error['file'], $error['line'], $error['message'])) {
 			return;
 		}
-		
+				
 // 		if ($error['type'] == E_WARNING && substr($error['message'], 0, 23) == 'DateTime::__construct()') {
 // 			return;
 // 		}
@@ -310,8 +313,11 @@ class ExceptionHandler {
 // 		}
 		
 		try {
-			$this->handleTriggeredError($error['type'], $error['message'], $error['file'], $error['line'], true);
+			$this->foreceThrow = true;
+			$this->handleTriggeredError($error['type'], $error['message'], $error['file'], $error['line']);
+			$this->foreceThrow = false;
 		} catch (\Throwable $e) {
+			$this->foreceThrow = false;
 			$this->dispatchException($e);
 		}
 
@@ -457,6 +463,14 @@ class ExceptionHandler {
 	 */
 	private function buildErrorHash($errno, $errfile, $errline, $errstr) {
 		return sha1($errno . '-' . $errfile . '-' . $errline . '-' . $errstr);
+	}
+	
+	private function registerError($errno, $errfile, $errline, $errstr) {
+		$this->errorHashes[] = $this->buildErrorHash($errno, $errfile, $errline, $errstr);
+	}
+	
+	private function checkForError($errno, $errfile, $errline, $errstr) {
+		return in_array($this->buildErrorHash($errno, $errfile, $errline, $errstr), $this->errorHashes);
 	}
 	/**
 	 * Logs the passed Exception. This includes a mail and error info file if it is enabled in 
