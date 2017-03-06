@@ -189,7 +189,7 @@ class ExceptionHandler {
 		return $this->ignoredErrorMessage;
 	} 
 	
-	private $foreceThrow = false;
+	private $forceThrow = false;
 	
 	/**
 	 * <p>Will be registered as php error_handler while ExceptionHandler initialization
@@ -313,11 +313,11 @@ class ExceptionHandler {
 // 		}
 		
 		try {
-			$this->foreceThrow = true;
+			$this->forceThrow = true;
 			$this->handleTriggeredError($error['type'], $error['message'], $error['file'], $error['line']);
-			$this->foreceThrow = false;
+			$this->forceThrow = false;
 		} catch (\Throwable $e) {
-			$this->foreceThrow = false;
+			$this->forceThrow = false;
 			$this->dispatchException($e);
 		}
 
