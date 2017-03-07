@@ -189,8 +189,6 @@ class ExceptionHandler {
 		return $this->ignoredErrorMessage;
 	} 
 	
-	private $forceThrow = false;
-	
 	/**
 	 * <p>Will be registered as php error_handler while ExceptionHandler initialization
 	 * {@link http://php.net/manual/de/function.set-error-handler.php}</p>
@@ -204,13 +202,12 @@ class ExceptionHandler {
 	 * @throws PHPErrorException
 	 * @return boolean
 	 */
-	public function handleTriggeredError($errno, $errstr, $errfile, $errline) {
-		
+	public function handleTriggeredError($errno, $errstr, $errfile, $errline, $errcontext = null, $forceThrow = false) {
 		$this->registerError($errno, $errfile, $errline, $errstr);
 		$ignoredNextTriggeredErrNo = $this->ignoredNextTriggeredErrNo;
 		$this->ignoredNextTriggeredErrNo = 0;
 		
-		if (!$this->forceThrow && $ignoredNextTriggeredErrNo & $errno) {
+		if (!$forceThrow && $ignoredNextTriggeredErrNo & $errno) {
 			$this->ignoredErrorMessage = $errstr;
 			return true;
 		}
@@ -220,7 +217,7 @@ class ExceptionHandler {
 			//$this->stable = false;
 		} else {
 			// @ --> error_reporting() == false
-			if (!$this->forceThrow && !error_reporting()) return false;
+			if (!$forceThrow && !error_reporting()) return false;
 		}
 		
 		$e = $this->createPhpError($errno, $errstr, $errfile, $errline);
@@ -228,7 +225,7 @@ class ExceptionHandler {
 	
 		$this->log($e);
 		
-		if ($this->forceThrow || $this->strictAttitude || !($errno & self::STRICT_ATTITUTE_PHP_SEVERITIES)) {
+		if ($forceThrow || $this->strictAttitude || !($errno & self::STRICT_ATTITUTE_PHP_SEVERITIES)) {
 			throw $e;
 		}
 	
@@ -313,11 +310,8 @@ class ExceptionHandler {
 // 		}
 		
 		try {
-			$this->forceThrow = true;
-			$this->handleTriggeredError($error['type'], $error['message'], $error['file'], $error['line']);
-			$this->forceThrow = false;
+			$this->handleTriggeredError($error['type'], $error['message'], $error['file'], $error['line'], null, true);
 		} catch (\Throwable $e) {
-			$this->forceThrow = false;
 			$this->dispatchException($e);
 		}
 
