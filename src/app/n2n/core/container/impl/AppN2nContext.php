@@ -53,6 +53,7 @@ use n2n\core\config\N2nLocaleConfig;
 use n2n\persistence\orm\EntityManagerFactory;
 use n2n\persistence\orm\EntityManager;
 use n2n\core\container\PdoPool;
+use n2n\web\http\Session;
 
 class AppN2nContext implements N2nContext {
 	private $transactionManager;
@@ -216,7 +217,14 @@ class AppN2nContext implements N2nContext {
 					if (!$required) return null;
 					throw new MagicObjectUnavailableException('Response not available.', 0, $e); 
 				}
-			case HttpContext::class: 
+			case Session::class:
+				try {
+					return $this->getHttpContext()->getSession();
+				} catch (HttpContextNotAvailableException $e) {
+					if (!$required) return null;
+					throw new MagicObjectUnavailableException('Session not available.', 0, $e);
+				}
+			case HttpContext::class:
 				try {
 					return $this->getHttpContext();
 				} catch (HttpContextNotAvailableException $e) {
