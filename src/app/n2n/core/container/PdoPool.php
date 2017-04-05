@@ -109,6 +109,7 @@ class PdoPool implements ThreadScoped {
 		
 		return $this->dbhs[$persistenceUnitName];
 	}
+	
 	/**
 	 * @param PersistenceUnitConfig $persistenceUnitConfig
 	 * @return Pdo
@@ -116,6 +117,7 @@ class PdoPool implements ThreadScoped {
 	public function createPdo(PersistenceUnitConfig $persistenceUnitConfig) {
 		return new Pdo($persistenceUnitConfig, $this->transactionManager);
 	}
+	
 	/**
 	 *
 	 * @param string $persistenceUnitName
