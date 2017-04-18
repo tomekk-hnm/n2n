@@ -192,7 +192,7 @@ class TypeLoader {
 		}
 	}
 	
-	public static function getFilePathOfType($typeName, $fileExt = self::SCRIPT_FILE_EXTENSION) {
+	public static function getFilePathOfType(string $typeName, $fileExt = self::SCRIPT_FILE_EXTENSION) {
 		if (self::isTypeUnsafe($typeName)) {
 			throw new \InvalidArgumentException('Type name contains invalid characters: ' . $typeName);
 		}
