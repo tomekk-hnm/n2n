@@ -162,7 +162,7 @@ class AppConfigFactory {
 				$this->createControllerDefs($supersystemGroupReader, $subsystemGroupReaders, self::FILTERS_KEY),
 				$this->createSupersystem($supersystemGroupReader),
 				$this->createSubsystemConfigs($subsystemGroupReaders),
-				$groupReader->getScalarArray(self::DISPATCH_PROPERTY_FACTORIES_NAMES_KEY, false, array()),
+				array_unique($groupReader->getScalarArray(self::DISPATCH_PROPERTY_FACTORIES_NAMES_KEY, false, array())),
 				($groupReader->getBool(self::DISPATCH_TARGET_CRYPT_ENABLED_KEY, false, self::DISPATCH_TARGET_CRYPT_ENABLED_DEFAULT) 
 						? $groupReader->getString(self::DISPATCH_TARGET_CRYPT_ALGORITHM_KEY, false, self::DISPATCH_TARGET_CRYPT_ALGORITHM_DEFAULT) : null),
 				$groupReader->getN2nLocaleKeyArray(self::LOCALE_ALIASES_KEY));
@@ -353,8 +353,8 @@ class AppConfigFactory {
 	const ENTITY_NAMING_STRATEGY_KEY = 'naming_strategy';
 	
 	private function createOrmConfig(GroupReader $groupReader) {
-		return new OrmConfig($groupReader->getScalarArray(self::ENTITIES_KEY, false, array()),
-				$groupReader->getScalarArray(self::ENTITY_PROPERTY_PROVIDERS_KEY, false, array()),
+		return new OrmConfig(array_unique($groupReader->getScalarArray(self::ENTITIES_KEY, false, array())),
+				array_unique($groupReader->getScalarArray(self::ENTITY_PROPERTY_PROVIDERS_KEY, false, array())),
 				$groupReader->getString(self::ENTITY_NAMING_STRATEGY_KEY, false));
 	}
 
