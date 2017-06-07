@@ -666,7 +666,7 @@ class N2N {
 	public static function autoInvokeControllers() {
 		$n2nContext = self::_i()->n2nContext;
 		$response = $n2nContext->getHttpContext()->getResponse();
-		if ($response->sendCachedResponseThing()) {
+		if ($response->sendCachedResponseObject()) {
 			return;
 		}
 		
