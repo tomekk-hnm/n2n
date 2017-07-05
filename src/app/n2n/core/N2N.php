@@ -724,7 +724,7 @@ class N2N {
 	 * @return \n2n\core\container\TransactionManager
 	 */
 	public static function getTransactionManager() {
-		return self::_i()->transactionalContext;
+		return self::_i()->n2nContext->getTransactionManager();
 	}
 	
 // 	public static function setTransactionContext(TransactionManager $transactionManager) {
