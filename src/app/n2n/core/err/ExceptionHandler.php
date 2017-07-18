@@ -616,6 +616,10 @@ class ExceptionHandler {
 			if (!empty($_POST)) {
 				$debugContent .= $this->createLogArrayStr('HTTP POST VARS', $_POST);
 			}
+			
+			if (!empty($_COOKIE)) {
+				$debugContent .= $this->createLogArrayStr('HTTP COOKIE VARS', $_COOKIE);
+			}
 		}
 		
 		return $debugContent;
