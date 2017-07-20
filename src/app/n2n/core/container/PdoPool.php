@@ -36,6 +36,7 @@ use n2n\core\container\N2nContext;
 use n2n\core\config\OrmConfig;
 use n2n\persistence\Pdo;
 use n2n\persistence\UnknownPersistenceUnitException;
+use n2n\persistence\PdoPoolListener;
 
 class PdoPool implements ThreadScoped {
 	const DEFAULT_DS_NAME = 'default';
