@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2012-2016, Hofmänner New Media.
+ * Copyright (c) 2012-2016, Hofmänner New Media.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This file is part of the N2N FRAMEWORK.
@@ -15,7 +15,7 @@
  * The following people participated in this project:
  *
  * Andreas von Burg.....: Architect, Lead Developer
- * Bert Hofmänner.......: Idea, Community Leader, Marketing
+ * Bert Hofmänner.......: Idea, Frontend UI, Community Leader, Marketing
  * Thomas Günther.......: Developer, Hangar
  */
 ;jQuery(document).ready(function($) {

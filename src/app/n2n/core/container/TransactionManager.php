@@ -48,18 +48,28 @@ class TransactionManager extends ObjectAdapter {
 		
 		return $this->transactions[$this->currentLevel] = $transaction;
 	}
-
+	
+	/**
+	 * Returns true if there is an open transaction 
+	 * @return bool
+	 */
 	public function hasOpenTransaction() {
 		return $this->rootTransaction !== null;
 	}
 	
+	/**
+	 * Returns true if there is an open read only transaction.
+	 * @return bool true or false if a transaction is open, otherwise null.
+	 */
 	public function isReadyOnly() {
 		return $this->readOnly;
 	}
+	
 	/**
 	 * @return \n2n\core\container\Transaction
+	 * @throws TransactionStateException if no transaction is open.
 	 */
-	public function getRootTransactions() {
+	public function getRootTransaction() {
 		if ($this->rootTransaction !== null) {
 			return $this->rootTransaction;
 		}
@@ -67,6 +77,10 @@ class TransactionManager extends ObjectAdapter {
 		throw new TransactionStateException('No active transaction.');
 	}
 	
+	/**
+	 * @return \n2n\core\container\Transaction
+	 * @throws TransactionStateException if no transaction is open.
+	 */
 	public function getCurrentTransaction() { 
 		if (false !== ($transaction = end($this->transactions))) {
 			return $transaction;
