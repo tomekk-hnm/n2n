@@ -138,13 +138,20 @@ class Lock {
 	}
 
 	public function release() {
-		IoUtils::flock($this->resource, LOCK_UN);
-		if (!$this->exclusive && !flock($this->resource, LOCK_EX|LOCK_NB)) {
-			fclose($this->resource);
+		if ($this->resource === null) {
 			return;
 		}
 		
-		fclose($this->resource);
+		$resource = $this->resource;
+		$this->resource = null;
+		
+		IoUtils::flock($resource, LOCK_UN);
+		if (!$this->exclusive && !flock($resource, LOCK_EX|LOCK_NB)) {
+			fclose($resource);
+			return;
+		}
+		
+		fclose($resource);
 		IoUtils::unlink($this->fileName);
 	}
 	
@@ -155,4 +162,10 @@ class Lock {
 	public function hasBlocked() {
 		return $this->blocked;
 	}
+	
+	public function __destruct() {
+		$this->release();
+	}
+	
+	
 }

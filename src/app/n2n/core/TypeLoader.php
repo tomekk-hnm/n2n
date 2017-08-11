@@ -140,6 +140,10 @@ class TypeLoader {
 // 	}
 	
 	private static function requireScript($scriptPath, $typeName) {
+		if (false !== stripos($scriptPath, 'LoggingEvent')) {
+			debug_print_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+		}
+		
 		require_once $scriptPath;
 		
 		if (!self::isTypeLoaded($typeName)) {

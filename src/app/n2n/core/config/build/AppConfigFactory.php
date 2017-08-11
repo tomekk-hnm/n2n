@@ -142,7 +142,7 @@ class AppConfigFactory {
 	const DISPATCH_TARGET_CRYPT_ENABLED_KEY = 'dispatch.target_crypt_enabled';
 	const DISPATCH_TARGET_CRYPT_ENABLED_DEFAULT = true;
 	const DISPATCH_TARGET_CRYPT_ALGORITHM_KEY = 'dispatch.target_crypt_algorithm';
-	const DISPATCH_TARGET_CRYPT_ALGORITHM_DEFAULT = EncryptionDescriptor::ALGORITHM_RIJNDAEL_256;
+	const DISPATCH_TARGET_CRYPT_ALGORITHM_DEFAULT = EncryptionDescriptor::ALGORITHM_AES_256_CTR;
 	
 	const LOCALE_ALIASES_KEY = 'locale_aliases';
 
