@@ -182,6 +182,7 @@ class N2N {
 		N2nLocale::setDefault($n2nLocaleConfig->getDefaultN2nLocale());
 		N2nLocale::setFallback($n2nLocaleConfig->getFallbackN2nLocale());
 		N2nLocale::setAdmin($n2nLocaleConfig->getAdminN2nLocale());
+		N2nLocale::setWebAliases($this->appConfig->web()->getAliasN2nLocales());
 		
 		L10n::setL10nConfig($this->appConfig->l10n());
 		L10n::setPseudoL10nConfig($this->appConfig->pseudoL10n());
@@ -231,8 +232,7 @@ class N2N {
 			$assetsUrl = $request->getContextPath()->toUrl()->ext($assetsUrl);
 		}
 
-		$localeFormat = new N2nLocaleFormat($webConfig->getAliasN2nLocales());
-		$httpContext = new HttpContext($request, $response, $session, $assetsUrl, $localeFormat, 
+		$httpContext = new HttpContext($request, $response, $session, $assetsUrl, 
 				$webConfig->getSupersystem(), $webConfig->getSubsystems(), $this->n2nContext);
 		
 		$subsystem = $this->detectSubsystem($request->getHostName(), $request->getContextPath());
