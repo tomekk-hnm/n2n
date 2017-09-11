@@ -55,7 +55,6 @@ use n2n\l10n\L10n;
 use n2n\core\module\ModuleManager;
 use n2n\core\container\impl\AppN2nContext;
 use n2n\web\http\HttpContext;
-use n2n\web\http\N2nLocaleFormat;
 use n2n\reflection\CastUtils;
 use n2n\web\http\ResponseCacheStore;
 use n2n\web\dispatch\map\CorruptedDispatchException;
@@ -65,7 +64,7 @@ use n2n\core\module\impl\EtcModuleFactory;
 define('N2N_CRLF', "\r\n");
 
 class N2N {
-	const VERSION = '7.1.11';
+	const VERSION = '7.1.12';
 	const LOG4PHP_CONFIG_FILE = 'log4php.xml'; 
 	const LOG_EXCEPTION_DETAIL_DIR = 'exceptions';
 	const LOG_ERR_FILE = 'err.log';
