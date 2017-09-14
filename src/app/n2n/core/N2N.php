@@ -64,7 +64,7 @@ use n2n\core\module\impl\EtcModuleFactory;
 define('N2N_CRLF', "\r\n");
 
 class N2N {
-	const VERSION = '7.1.12';
+	const VERSION = '7.1.13';
 	const LOG4PHP_CONFIG_FILE = 'log4php.xml'; 
 	const LOG_EXCEPTION_DETAIL_DIR = 'exceptions';
 	const LOG_ERR_FILE = 'err.log';
