@@ -152,7 +152,8 @@ class Lock {
 		}
 		
 		fclose($resource);
-		IoUtils::unlink($this->fileName);
+		// file could already be deleted by another sync lock
+		@unlink($this->fileName);
 	}
 	
 	public function isExclusive() {
