@@ -129,7 +129,7 @@ class LazyModule implements Module {
 				self::VERSION_KEY => $moduleInfo->getVersion(),
 				self::DEPENDENCIES_KEY => $moduleInfo->getDependencies(),
 				self::INSTALL_DESCRIBER_KEY => $moduleInfo->getInstallDescriberClassName(),
-				self::CONFIG_DESCRIBER_KEY => $moduleInfo->getConfigDescriberClassName()));
+				self::CONFIG_DESCRIBER_KEY => $moduleInfo->getConfigDescriberClassName()), true);
 		
 		 $this->moduleConfigSource->writeArray(array(self::GROUP_INFO => $infoAttributes->toArray(),
 		 		self::GROUP_META => $metaAttributes->toArray()));
