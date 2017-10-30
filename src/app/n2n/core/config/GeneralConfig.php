@@ -31,12 +31,12 @@ class GeneralConfig {
 	private $applicationLogLevel;
 	private $batchControllerClassNames;
 	/**
-	 * @param unknown $pageName
-	 * @param unknown $pageUrl
-	 * @param unknown $pageAssetsDir
-	 * @param unknown $pagePublicUploadDir
-	 * @param unknown $applicationName
-	 * @param unknown $applicationLogLevel
+	 * @param string $pageName
+	 * @param string $pageUrl
+	 * @param string $pageAssetsDir
+	 * @param string $pagePublicUploadDir
+	 * @param string $applicationName
+	 * @param string $applicationLogLevel
 	 * @param array $batchControllerClassNames
 	 */
 	public function __construct(string $pageName, string $pageUrl = null, string $applicationName, string $applicationLogLevel = null, 

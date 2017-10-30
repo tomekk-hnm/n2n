@@ -22,6 +22,10 @@
 namespace n2n\core\config;
 
 use n2n\web\http\Supersystem;
+use n2n\reflection\ArgUtils;
+use n2n\web\http\Subsystem;
+use n2n\web\http\controller\ControllerDef;
+use n2n\l10n\N2nLocale;
 
 class WebConfig {
 	private $responseCachingEnabled;
@@ -38,10 +42,27 @@ class WebConfig {
 	private $dispatchTargetCryptAlgorithm;
 	private $aliasN2nLocales;
 	
+	/**
+	 * @param bool $responseCachingEnabled
+	 * @param bool $responseBrowserCachingEnabled
+	 * @param bool $responseSendEtagAllowed
+	 * @param bool $responseSendLastModifiedAllowed
+	 * @param bool $viewCachingEnabled
+	 * @param string[] $viewClassNames
+	 * @param ControllerDef[] $mainControllerDefs
+	 * @param ControllerDef[] $filterControllerDefs
+	 * @param Supersystem $supersystem
+	 * @param Supersystem[] $subsystems
+	 * @param string[] $dispatchPropertyProviderClassNames
+	 * @param string $dispatchTargetCryptAlgorithm
+	 * @param N2nLocale[] $aliasN2nLocales
+	 */
 	public function __construct(bool $responseCachingEnabled, bool $responseBrowserCachingEnabled, bool $responseSendEtagAllowed, 
 			bool $responseSendLastModifiedAllowed, bool $viewCachingEnabled, array $viewClassNames, array $mainControllerDefs,
 			array $filterControllerDefs, Supersystem $supersystem, array $subsystems, array $dispatchPropertyProviderClassNames,
 			string $dispatchTargetCryptAlgorithm = null, array $aliasN2nLocales) {
+		ArgUtils::valArray($subsystems, Subsystem::class);
+				
 		$this->responseCachingEnabled = $responseCachingEnabled;
 		$this->responseBrowserCachingEnabled = $responseBrowserCachingEnabled;
 		$this->responseSendEtagAllowed = $responseSendEtagAllowed;
@@ -57,34 +78,58 @@ class WebConfig {
 		$this->aliasN2nLocales = $aliasN2nLocales;
 	}
 	
+	/**
+	 * @return boolean
+	 */
 	public function isResponseCachingEnabled(): bool {
 		return $this->responseCachingEnabled;
 	}
 	
+	/**
+	 * @return boolean
+	 */
 	public function isResponseBrowserCachingEnabled(): bool {
 		return $this->responseBrowserCachingEnabled;
 	}
 	
+	/**
+	 * @return boolean
+	 */
 	public function isResponseSendEtagAllowed(): bool {
 		return $this->responseSendEtagAllowed;
 	}
 	
+	/**
+	 * @return boolean
+	 */
 	public function isResponseSendLastModifiedAllowed(): bool {
 		return $this->responseSendLastModifiedAllowed;
 	}
 	
+	/**
+	 * @return boolean
+	 */
 	public function isViewCachingEnabled(): bool {
 		return $this->viewCachingEnabled;
 	}
 	
+	/**
+	 * @return string[]
+	 */
 	public function getViewClassNames(): array {
 		return $this->viewClassNames;
 	}
 	
+	/**
+	 * @return ControllerDef[]
+	 */
 	public function getMainControllerDefs(): array {
 		return $this->mainControllerDefs;
 	}
 	
+	/**
+	 * @return ControllerDef[]
+	 */
 	public function getFilterControllerDefs(): array {
 		return $this->filterControllerDefs;
 	}
@@ -100,14 +145,17 @@ class WebConfig {
 		return $n2nLocales;
 	}
 	
-	public function getSupersystem(): Supersystem {
+	/**
+	 * @return Supersystem
+	 */
+	public function getSupersystem() {
 		return $this->supersystem;
 	}
 	
 	/**
 	 * @return string[]
 	 */
-	public function getSubsystemNames(): array {
+	public function getSubsystemNames() {
 		return array_keys($this->subsystems);
 	}
 	
