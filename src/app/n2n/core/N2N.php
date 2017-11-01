@@ -424,7 +424,7 @@ class N2N {
 	}
 	/**
 	 * @return \n2n\core\N2N
-	 * @throws \n2n\N2nHasNotYetBeenInitializedException
+	 * @throws \n2n\core\N2nHasNotYetBeenInitializedException
 	 */
 	protected static function _i() {
 		if(self::$n2n === null) {
@@ -498,7 +498,7 @@ class N2N {
 	/**
 	 * 
 	 * @param string $n2nLocaleId
-	 * @throws \n2n\N2nLocaleNotFoundException
+	 * @throws N2nLocaleNotFoundException
 	 * @return \n2n\l10n\N2nLocale
 	 */
 	public static function getN2nLocaleById($n2nLocaleId) {
