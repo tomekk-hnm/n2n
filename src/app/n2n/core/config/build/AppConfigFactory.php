@@ -358,7 +358,6 @@ class AppConfigFactory {
 				$groupReader->getString(self::ENTITY_NAMING_STRATEGY_KEY, false));
 	}
 
-	const IDS_KEY = 'ids';
 	const FALLBACK_LOCALE_ID_KEY = 'fallback';
 	const FALLBACK_LOCALE_ID_DEFAULT = 'en';
 	const ADMIN_LOCALE_ID_KEY = 'admin';
@@ -367,19 +366,10 @@ class AppConfigFactory {
 	const DEFAULT_LOCALE_ID_DEFAULT = 'rm_CH';
 	
 	private function createN2nLocalesConfig(GroupReader $groupReader) {
-		$n2nLocales = array();
-		foreach ($groupReader->getN2nLocaleArray(self::IDS_KEY, false, array()) as $alias => $n2nLocale) {
-			if (is_numeric($alias)) {
-				$alias = $n2nLocale->toHttpId();
-			}
-			$n2nLocales[$alias] = $n2nLocale;
-		}
-	
 		return new N2nLocaleConfig(
 				$groupReader->getN2nLocale(self::FALLBACK_LOCALE_ID_KEY, false, new N2nLocale(self::FALLBACK_LOCALE_ID_DEFAULT)),
 				$groupReader->getN2nLocale(self::ADMIN_LOCALE_ID_KEY, false, new N2nLocale(self::ADMIN_LOCALE_ID_DEFAULT)),
-				$groupReader->getN2nLocale(self::DEFAULT_LOCALE_ID_KEY, false, new N2nLocale(self::DEFAULT_LOCALE_ID_DEFAULT)),
-				$n2nLocales);
+				$groupReader->getN2nLocale(self::DEFAULT_LOCALE_ID_KEY, false, new N2nLocale(self::DEFAULT_LOCALE_ID_DEFAULT)));
 	}
 	
 	const L10N_ENABLED_KEY = 'l10n_enabled';

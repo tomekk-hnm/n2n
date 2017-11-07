@@ -27,13 +27,11 @@ class N2nLocaleConfig {
 	private $fallbackN2nLocale; 
 	private $adminN2nLocale; 
 	private $defaultN2nLocale; 
-	private $n2nLocales; 
 	
-	public function __construct(N2nLocale $fallbackN2nLocale, N2nLocale $adminN2nLocale, N2nLocale $defaultN2nLocale, array $n2nLocales) {
+	public function __construct(N2nLocale $fallbackN2nLocale, N2nLocale $adminN2nLocale, N2nLocale $defaultN2nLocale) {
 		$this->fallbackN2nLocale =  $fallbackN2nLocale;
 		$this->adminN2nLocale = $adminN2nLocale;
 		$this->defaultN2nLocale = $defaultN2nLocale;
-		$this->n2nLocales = $n2nLocales;
 	}
 	
 	/**
@@ -55,35 +53,5 @@ class N2nLocaleConfig {
 	 */
 	public function getDefaultN2nLocale(): N2nLocale  {
 		return $this->defaultN2nLocale;
-	}
-	
-	/**
-	 *
-	 * @return \n2n\l10n\N2nLocale[]
-	 */
-	public function getN2nLocales() {
-		return $this->n2nLocales;
-	}
-	
-	public function getN2nLocaleByAlias(string $alias) {
-		if (isset($this->n2nLocales[$alias])) {
-			return $this->n2nLocales[$alias];
-		}
-		
-		return null;
-	}
-	
-	public function getAliasByN2nLocale(N2nLocale $n2nLocale) {
-		foreach ($this->n2nLocales as $alias => $cN2nLocale) {
-			if (!is_numeric($alias) && $cN2nLocale->equals($n2nLocale)) {
-				return $alias;
-			}
-		}
-		
-		return null;
-	}
-	
-	public function containsN2nLocaleAlias(string $alias): bool {
-		
 	}
 }
