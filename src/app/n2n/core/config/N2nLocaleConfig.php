@@ -54,4 +54,11 @@ class N2nLocaleConfig {
 	public function getDefaultN2nLocale(): N2nLocale  {
 		return $this->defaultN2nLocale;
 	}
+	
+	/**
+	 * @deprecated
+	 */
+	public function getN2nLocales() {
+		return array($this->defaultN2nLocale);
+	}
 }
