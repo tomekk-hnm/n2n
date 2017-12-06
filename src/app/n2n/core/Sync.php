@@ -42,7 +42,7 @@ class Sync {
 		self::$fsPath = $fsPath;
 	} 
 	/**
-	 * @param unknown $class
+	 * @param string|\ReflectionClass $class
 	 * @param string $key
 	 * @return \n2n\core\Lock
 	 */
@@ -50,7 +50,7 @@ class Sync {
 		return self::createLock($class, $key, LOCK_EX);			
 	}
 	/**
-	 * @param unknown $class
+	 * @param string|\ReflectionClass $class
 	 * @param string $key
 	 * @return \n2n\core\Lock or null
 	 */
@@ -58,7 +58,7 @@ class Sync {
 		return self::createLock($class, $key, LOCK_EX|LOCK_NB);
 	}
 	/**
-	 * @param unknown $class
+	 * @param string|\ReflectionClass $class
 	 * @param string $key
 	 * @return \n2n\core\Lock
 	 */
@@ -66,7 +66,7 @@ class Sync {
 		return self::createLock($class, $key, LOCK_SH);
 	}
 	/**
-	 * @param unknown $class
+	 * @param string|\ReflectionClass $class
 	 * @param string $key
 	 * @return \n2n\core\Lock or null
 	 */
@@ -74,9 +74,9 @@ class Sync {
 		return self::createLock($class, $key, LOCK_SH|LOCK_NB);
 	}
 	/**
-	 * @param unknown $class
-	 * @param unknown $key
-	 * @param unknown $operation
+	 * @param string|\ReflectionClass $class
+	 * @param string $key
+	 * @param int $operation
 	 * @throws IllegalStateException
 	 * @return \n2n\core\Lock
 	 */

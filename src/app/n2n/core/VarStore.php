@@ -26,6 +26,7 @@ use n2n\io\InvalidPathException;
 use n2n\io\fs\FsPath;
 use n2n\io\IoUtils;
 use n2n\util\ex\IllegalStateException;
+use n2n\io\IoException;
 
 class VarStore {
 	const CATEGORY_ETC = 'etc';
@@ -76,7 +77,9 @@ class VarStore {
 	 * @param string $directoryName
 	 * @param bool $create
 	 * @param bool $required
-	 * @throws VarStoreException
+	 * @throws \InvalidArgumentException
+	 * @throws IoException
+	 * @throws IllegalStateException
 	 * @return \n2n\io\fs\FsPath
 	 */
 	public function requestDirFsPath($category, $module, $directoryName, $create = true, $required = true) {

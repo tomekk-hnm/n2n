@@ -21,7 +21,6 @@
  */
 namespace n2n\core;
 
-use n2n\core\N2N;
 use n2n\util\StringUtils;
 use n2n\reflection\ReflectionUtils;
 
@@ -104,7 +103,7 @@ class TypeLoader {
 	}
 	/**
 	 * 
-	 * @param unknown_type $typeName
+	 * @param string $typeName
 	 * @throws TypeNotFoundException
 	 * @return \ReflectionClass
 	 */
@@ -119,7 +118,7 @@ class TypeLoader {
 	}
 	/**
 	 *
-	 * @param unknown_type $typeName
+	 * @param string $typeName
 	 * @throws TypeNotFoundException
 	 */
 	public static function ensureTypeIsLoaded($typeName) {

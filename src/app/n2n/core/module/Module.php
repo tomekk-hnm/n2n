@@ -21,7 +21,6 @@
  */
 namespace n2n\core\module;
 
-use n2n\core\module\ModuleInfo;
 use n2n\core\container\N2nContext;
 
 interface Module {	
@@ -65,17 +64,17 @@ interface Module {
 	 */
 	public function createConfigDescriber(N2nContext $n2nContext): ConfigDescriber;
 	
-	/**
-	 * @return bool 
-	 */
-	public function hasInstallDescriber(): bool;
+// 	/**
+// 	 * @return bool 
+// 	 */
+// 	public function hasInstallDescriber(): bool;
 	
-	/**
-	 * @return \n2n\core\module\InstallDescriber
-	 * @throws \n2n\util\ex\IllegalStateException if {@Module::hasConfigDescriber()} returns false.
-	 * @throws \n2n\util\config\InvalidConfigurationException
-	 */
-	public function createInstallDescriber(): InstallDescriber;
+// 	/**
+// 	 * @return \n2n\core\module\InstallDescriber
+// 	 * @throws \n2n\util\ex\IllegalStateException if {@Module::hasConfigDescriber()} returns false.
+// 	 * @throws \n2n\util\config\InvalidConfigurationException
+// 	 */
+// 	public function createInstallDescriber(): InstallDescriber;
 	
 	/**
 	 * Must return namespace of module.

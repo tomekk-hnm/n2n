@@ -19,29 +19,29 @@
  * Bert Hofmänner.......: Idea, Frontend UI, Community Leader, Marketing
  * Thomas Günther.......: Developer, Hangar
  */
-namespace n2n\core\module;
+// namespace n2n\core\module;
 
-interface InstallDescriber {
-	/**
-	 * 
-	 */
-	public function __construct();
-	/**
-	 * @param SetupProcess $setupProcess
-	 * @throws ModuleInstallationException
-	 * @throws \PDOException
-	 */
-	public function install(SetupProcess $setupProcess);
-	/**
-	 * @param SetupProcess $setupProcess
-	 * @throws ModuleInstallationException
-	 * @throws \PDOException
-	 */
-	public function update(SetupProcess $setupProcess);
-	/**
-	 * @param SetupProcess $setupProcess
-	 * @throws ModuleInstallationException
-	 * @throws \PDOException
-	 */
-	public function uninstall(SetupProcess $setupProcess);
-}
+// interface InstallDescriber {
+// 	/**
+// 	 * 
+// 	 */
+// 	public function __construct();
+// 	/**
+// 	 * @param SetupProcess $setupProcess
+// 	 * @throws ModuleInstallationException
+// 	 * @throws \PDOException
+// 	 */
+// 	public function install(SetupProcess $setupProcess);
+// 	/**
+// 	 * @param SetupProcess $setupProcess
+// 	 * @throws ModuleInstallationException
+// 	 * @throws \PDOException
+// 	 */
+// 	public function update(SetupProcess $setupProcess);
+// 	/**
+// 	 * @param SetupProcess $setupProcess
+// 	 * @throws ModuleInstallationException
+// 	 * @throws \PDOException
+// 	 */
+// 	public function uninstall(SetupProcess $setupProcess);
+// }
