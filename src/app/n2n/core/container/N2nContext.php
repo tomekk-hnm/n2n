@@ -24,7 +24,6 @@ namespace n2n\core\container;
 use n2n\l10n\N2nLocale;
 use n2n\reflection\magic\MagicContext;
 use n2n\core\VarStore;
-use n2n\core\module\Module;
 use n2n\core\module\ModuleManager;
 use n2n\web\http\HttpContext;
 use n2n\web\http\HttpContextNotAvailableException;

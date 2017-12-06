@@ -34,7 +34,6 @@ use n2n\reflection\magic\MagicUtils;
 use n2n\context\LookupFailedException;
 use n2n\core\config\AppConfig;
 use n2n\core\VarStore;
-use n2n\core\module\Module;
 use n2n\core\container\N2nContext;
 use n2n\core\container\TransactionManager;
 use n2n\core\module\ModuleManager;

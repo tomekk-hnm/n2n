@@ -199,7 +199,7 @@ class ExceptionHandler {
 	 * @param string $errstr
 	 * @param string $errfile
 	 * @param string $errline
-	 * @throws PHPErrorException
+	 * @throws \Error
 	 * @return boolean
 	 */
 	public function handleTriggeredError($errno, $errstr, $errfile, $errline, $errcontext = null, $forceThrow = false) {
@@ -335,7 +335,7 @@ class ExceptionHandler {
 	 * @param string $errstr
 	 * @param string $errfile
 	 * @param string $errline
-	 * @return PHPErrorException created exception
+	 * @return \Error created exception
 	 */
 	private function createPhpError($errno, $errstr, $errfile, $errline) {
 		switch($errno) {
@@ -449,10 +449,10 @@ class ExceptionHandler {
 	/**
 	 * An Error Hash is a unique hash of an triggered error.
 	 *	
-	 * @param unknown_type $errno
-	 * @param unknown_type $errfile
-	 * @param unknown_type $errline
-	 * @param unknown_type $errstr
+	 * @param int $errno
+	 * @param string $errfile
+	 * @param int $errline
+	 * @param string $errstr
 	 * @return string
 	 */
 	private function buildErrorHash($errno, $errfile, $errline, $errstr) {
@@ -714,7 +714,7 @@ class ExceptionHandler {
 	}
 	/**
 	 * prints exception infos n2n was executed on the console.
-	 * @param Exception $t
+	 * @param \Throwable $t
 	 */
 	private function renderExceptionConsoleInfo(\Throwable $t) {
 		if (!N2N::isLiveStageOn()) {

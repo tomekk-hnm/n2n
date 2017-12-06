@@ -22,7 +22,6 @@
 namespace n2n\core\module\impl;
 
 use n2n\core\VarStore;
-use n2n\core\module\Module;
 use n2n\util\config\source\ConfigSource;
 use n2n\core\module\ModuleFactory;
 use n2n\util\config\source\IniFileConfigSource;

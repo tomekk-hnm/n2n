@@ -27,12 +27,10 @@ use n2n\persistence\orm\LazyEntityManagerFactory;
 use n2n\reflection\ArgUtils;
 use n2n\persistence\orm\model\EntityModelManager;
 use n2n\persistence\orm\proxy\EntityProxyManager;
-use n2n\core\container\TransactionManager;
 use n2n\reflection\magic\MagicContext;
 use n2n\context\ThreadScoped;
 use n2n\core\config\DbConfig;
 use n2n\persistence\orm\model\EntityModelFactory;
-use n2n\core\container\N2nContext;
 use n2n\core\config\OrmConfig;
 use n2n\persistence\Pdo;
 use n2n\persistence\UnknownPersistenceUnitException;
@@ -91,7 +89,6 @@ class PdoPool implements ThreadScoped {
 	}
 	/**
 	 * @param string $persistenceUnitName
-	 * @param Module $module
 	 * @return \n2n\persistence\Pdo
 	 */
 	public function getPdo(string $persistenceUnitName = null) {
@@ -122,7 +119,6 @@ class PdoPool implements ThreadScoped {
 	/**
 	 *
 	 * @param string $persistenceUnitName
-	 * @param Module $module
 	 * @return \n2n\persistence\orm\EntityManagerFactory
 	 */
 	public function getEntityManagerFactory($persistenceUnitName = null) {
