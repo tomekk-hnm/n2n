@@ -33,7 +33,6 @@ use n2n\util\config\source\WritableConfigSource;
 use n2n\util\ex\IllegalStateException;
 use n2n\core\module\Module;
 use n2n\core\module\ConfigDescriber;
-use n2n\core\module\InstallDescriber;
 use n2n\util\config\Attributes;
 
 class LazyModule implements Module {	
@@ -170,32 +169,32 @@ class LazyModule implements Module {
 		return null !== $this->getModuleInfo()->getInstallDescriberClassName();
 	}
 	
-	public function createInstallDescriber(): InstallDescriber {
-		$describerClassName = $this->getModuleInfo()->getInstallDescriberClassName();
-		if ($describerClassName === null) {
-			throw new IllegalStateException('No install describer available.');
-		}
+// 	public function createInstallDescriber(): InstallDescriber {
+// 		$describerClassName = $this->getModuleInfo()->getInstallDescriberClassName();
+// 		if ($describerClassName === null) {
+// 			throw new IllegalStateException('No install describer available.');
+// 		}
 		
-		$describerClass = null;
-		try {
-			$describerClass = ReflectionUtils::createReflectionClass($describerClassName);
-		} catch (TypeNotFoundException $e) {
-			throw $this->createInvalidInstallDescriberException($e);
-		}
+// 		$describerClass = null;
+// 		try {
+// 			$describerClass = ReflectionUtils::createReflectionClass($describerClassName);
+// 		} catch (TypeNotFoundException $e) {
+// 			throw $this->createInvalidInstallDescriberException($e);
+// 		}
 		
-		if (!$describerClass->implementsInterface(InstallDescriber::class)) {
-			throw $this->createInvalidInstallDescriberException(new InvalidConfigurationException(
-					'InstallDescriber must implement interface ' . InstallDescriber::class . ': '
-							. $describerClass->getName()));
-		}
+// 		if (!$describerClass->implementsInterface(InstallDescriber::class)) {
+// 			throw $this->createInvalidInstallDescriberException(new InvalidConfigurationException(
+// 					'InstallDescriber must implement interface ' . InstallDescriber::class . ': '
+// 							. $describerClass->getName()));
+// 		}
 		
-		return $this->installDescriber = $describerClass->newInstance();
-	}
+// 		return $this->installDescriber = $describerClass->newInstance();
+// 	}
 	
-	private function createInvalidInstallDescriberException(\Exception $previous) {
-		throw new InvalidConfigurationException('Invalid InstallDescriber class defined for module '
-				. $this->namespace, 0, $previous);
-	}
+// 	private function createInvalidInstallDescriberException(\Exception $previous) {
+// 		throw new InvalidConfigurationException('Invalid InstallDescriber class defined for module '
+// 				. $this->namespace, 0, $previous);
+// 	}
 	
 	/**
 	 * 
