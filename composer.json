@@ -3,18 +3,18 @@
     "type": "n2n-module",
     "description": "The core of n2n framework.",
     "keywords": ["n2n","framework"],
-    "homepage": "http://www.n2n.ch",
-    "license": "GNU LGPL v3",
+    "homepage": "https://www.n2n.ch/",
+    "license": "GPL-3.0-or-later",
     "authors": [
         {
             "name": "Andreas von Burg",
             "email": "a@von-burg.net",
-            "homepage": "http://andreas.von-burg.net"
+            "homepage": "https://www.von-burg.net/"
         },
         {
             "name": "Bert Hofmänner",
             "email": "hofmaenner@hnm.ch",
-            "homepage": "http://www.hnm.ch"
+            "homepage": "https://www.hnm.ch/"
         },
         {
             "name": "Thomas Günther",
