@@ -816,7 +816,7 @@ class ExceptionHandler {
 	 * @return bool
 	 */
 	private function isObActive() {
-		return sizeof(ob_get_level());
+		return 0 < ob_get_level();
 	}
 	/**
 	 * @return string
