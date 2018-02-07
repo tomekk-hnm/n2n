@@ -47,7 +47,6 @@ class LazyModule implements Module {
 	const VERSION_KEY = 'version';
 	const DEPENDENCIES_KEY = 'dependencies';
 	const CONFIG_DESCRIBER_KEY = 'config_describer';
-	const INSTALL_DESCRIBER_KEY = 'install_describer';
 	
 	private $namespace;
 	private $appConfigSource;
@@ -102,7 +101,6 @@ class LazyModule implements Module {
 		$this->moduleInfo->setVersion($groupReader->getString(self::VERSION_KEY, false));
 		$this->moduleInfo->setDependencies($groupReader->getScalarArray(self::DEPENDENCIES_KEY, false, array()));
 		$this->moduleInfo->setConfigDescriberClassName($groupReader->getString(self::CONFIG_DESCRIBER_KEY, false));
-		$this->moduleInfo->setInstallDescriberClassName($groupReader->getString(self::INSTALL_DESCRIBER_KEY, false));
 			
 		return $this->moduleInfo;
 	}
@@ -127,7 +125,6 @@ class LazyModule implements Module {
 		$metaAttributes->appendAll(array(
 				self::VERSION_KEY => $moduleInfo->getVersion(),
 				self::DEPENDENCIES_KEY => $moduleInfo->getDependencies(),
-				self::INSTALL_DESCRIBER_KEY => $moduleInfo->getInstallDescriberClassName(),
 				self::CONFIG_DESCRIBER_KEY => $moduleInfo->getConfigDescriberClassName()), true);
 		
 		 $this->moduleConfigSource->writeArray(array(self::GROUP_INFO => $infoAttributes->toArray(),
@@ -157,44 +154,13 @@ class LazyModule implements Module {
 							. ConfigDescriber::class . ': ' . $describerClass->getName()));
 		}
 		
-		return $this->configDescriber = $describerClass->newInstance($this, $n2nContext);
+		return $describerClass->newInstance($this, $n2nContext);
 	}
 	
 	private function createInvalidConfigDescriberException(\Exception $previous) {
 		throw new InvalidConfigurationException('Invalid ConfigDescriber class defined for module '
 				. $this->namespace, 0, $previous);
 	}
-	
-	public function hasInstallDescriber(): bool {
-		return null !== $this->getModuleInfo()->getInstallDescriberClassName();
-	}
-	
-// 	public function createInstallDescriber(): InstallDescriber {
-// 		$describerClassName = $this->getModuleInfo()->getInstallDescriberClassName();
-// 		if ($describerClassName === null) {
-// 			throw new IllegalStateException('No install describer available.');
-// 		}
-		
-// 		$describerClass = null;
-// 		try {
-// 			$describerClass = ReflectionUtils::createReflectionClass($describerClassName);
-// 		} catch (TypeNotFoundException $e) {
-// 			throw $this->createInvalidInstallDescriberException($e);
-// 		}
-		
-// 		if (!$describerClass->implementsInterface(InstallDescriber::class)) {
-// 			throw $this->createInvalidInstallDescriberException(new InvalidConfigurationException(
-// 					'InstallDescriber must implement interface ' . InstallDescriber::class . ': '
-// 							. $describerClass->getName()));
-// 		}
-		
-// 		return $this->installDescriber = $describerClass->newInstance();
-// 	}
-	
-// 	private function createInvalidInstallDescriberException(\Exception $previous) {
-// 		throw new InvalidConfigurationException('Invalid InstallDescriber class defined for module '
-// 				. $this->namespace, 0, $previous);
-// 	}
 	
 	/**
 	 * 
