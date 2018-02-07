@@ -31,7 +31,6 @@ class ModuleInfo {
 	private $version;
 	private $dependencies;
 	private $configDescriberClassName;
-	private $installDescriberClassName;
 	
 	public function getName() {
 		return $this->name;
@@ -88,13 +87,5 @@ class ModuleInfo {
 
 	public function setConfigDescriberClassName(string $configDescriberClassName = null) {
 		$this->configDescriberClassName = $configDescriberClassName;
-	}
-
-	public function getInstallDescriberClassName() {
-		return $this->installDescriberClassName;
-	}
-
-	public function setInstallDescriberClassName($installDescriberClassName = null) {
-		$this->installDescriberClassName = $installDescriberClassName;
 	}
 }
