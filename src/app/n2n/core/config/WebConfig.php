@@ -32,6 +32,7 @@ class WebConfig {
 	private $responseBrowserCachingEnabled; 
 	private $responseSendEtagAllowed;
 	private $responseSendLastModifiedAllowed; 
+	private $responseServerPushAllowed;
 	private $viewCachingEnabled; 
 	private $viewClassNames; 
 	private $mainControllerDefs; 
@@ -47,6 +48,7 @@ class WebConfig {
 	 * @param bool $responseBrowserCachingEnabled
 	 * @param bool $responseSendEtagAllowed
 	 * @param bool $responseSendLastModifiedAllowed
+	 * @param bool $responseServerPushAllowed
 	 * @param bool $viewCachingEnabled
 	 * @param string[] $viewClassNames
 	 * @param ControllerDef[] $mainControllerDefs
@@ -58,7 +60,7 @@ class WebConfig {
 	 * @param N2nLocale[] $aliasN2nLocales
 	 */
 	public function __construct(bool $responseCachingEnabled, bool $responseBrowserCachingEnabled, bool $responseSendEtagAllowed, 
-			bool $responseSendLastModifiedAllowed, bool $viewCachingEnabled, array $viewClassNames, array $mainControllerDefs,
+			bool $responseServerPushAllowed, bool $responseSendLastModifiedAllowed, bool $viewCachingEnabled, array $viewClassNames, array $mainControllerDefs,
 			array $filterControllerDefs, Supersystem $supersystem, array $subsystems, array $dispatchPropertyProviderClassNames,
 			string $dispatchTargetCryptAlgorithm = null, array $aliasN2nLocales) {
 		ArgUtils::valArray($subsystems, Subsystem::class);
@@ -67,6 +69,7 @@ class WebConfig {
 		$this->responseBrowserCachingEnabled = $responseBrowserCachingEnabled;
 		$this->responseSendEtagAllowed = $responseSendEtagAllowed;
 		$this->responseSendLastModifiedAllowed = $responseSendLastModifiedAllowed;
+		$this->responseServerPushAllowed = $responseServerPushAllowed;
 		$this->viewCachingEnabled = $viewCachingEnabled;
 		$this->viewClassNames = $viewClassNames;
 		$this->mainControllerDefs = $mainControllerDefs;
@@ -104,6 +107,13 @@ class WebConfig {
 	 */
 	public function isResponseSendLastModifiedAllowed(): bool {
 		return $this->responseSendLastModifiedAllowed;
+	}
+		
+	/**
+	* @return boolean
+	*/
+	public function isResponseServerPushAllowed(): bool {
+		return $this->responseServerPushAllowed;
 	}
 	
 	/**
