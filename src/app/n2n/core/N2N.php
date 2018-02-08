@@ -57,7 +57,7 @@ use n2n\core\module\impl\EtcModuleFactory;
 define('N2N_CRLF', "\r\n");
 
 class N2N {
-	const VERSION = '7.2.0';
+	const VERSION = '7.2.0-beta.2';
 	const LOG4PHP_CONFIG_FILE = 'log4php.xml'; 
 	const LOG_EXCEPTION_DETAIL_DIR = 'exceptions';
 	const LOG_ERR_FILE = 'err.log';
@@ -218,6 +218,7 @@ class N2N {
 		$response->setHttpCachingEnabled($webConfig->isResponseBrowserCachingEnabled());
 		$response->setSendEtagAllowed($webConfig->isResponseSendEtagAllowed());
 		$response->setSendLastModifiedAllowed($webConfig->isResponseSendLastModifiedAllowed());
+		$response->setServerPushAllowed($webConfig->isResponseServerPushAllowed());
 		
 		$assetsUrl = $filesConfig->getAssetsUrl();
 		if ($assetsUrl->isRelative() && !$assetsUrl->getPath()->hasLeadingDelimiter()) {
