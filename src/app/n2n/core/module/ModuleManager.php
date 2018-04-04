@@ -34,6 +34,9 @@ class ModuleManager {
 		return isset($this->modules[$namespace]);
 	}
 	
+	/**
+	 * @return Module []
+	 */
 	public function getModules(): array {
 		return $this->modules;
 	}
