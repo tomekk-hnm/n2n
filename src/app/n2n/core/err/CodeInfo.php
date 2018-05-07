@@ -93,7 +93,7 @@ class CodeInfo {
 				$line = rtrim($line);
 			}
 			
-			$raw->append(htmlspecialchars($line));
+			$raw->append(htmlspecialchars($line, ENT_SUBSTITUTE));
 		}
 				
 		return $raw;
