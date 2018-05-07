@@ -283,12 +283,11 @@ class AppConfigFactory {
 				$this->parsePublicFsPath($groupReader->getString(self::ASSETS_DIR_KEY,
 						false, self::ASSETS_DIR_DEFAULT)),
 				Url::create($groupReader->getString(self::ASSETS_URL_KEY, false, self::ASSETS_DIR_DEFAULT)),
-				$this->parsePublicFsPath($groupReader->getString(self::MANAGER_PUBLIC_DIR_KEY, 
+				$this->parsePublicFsPath($groupReader->getString(self::MANAGER_PUBLIC_DIR_KEY,
 						false, self::MANAGER_PUBLIC_DIR_DEFAULT)),
-				Url::create($groupReader->getString(self::MANAGER_PUBLIC_URL_KEY, 
+				Url::create($groupReader->getString(self::MANAGER_PUBLIC_URL_KEY,
 						false, self::MANAGER_PUBLIC_URL_DEFAULT)),
-				$this->parsePublicFsPath($groupReader->getString(self::MANAGER_PRIVATE_DIR_KEY, 
-						false, null)));
+				$groupReader->getString(self::MANAGER_PRIVATE_DIR_KEY, false, null));
 	}
 	
 	private function parsePublicFsPath($name) {
