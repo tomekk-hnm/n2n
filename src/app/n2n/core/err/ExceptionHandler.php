@@ -696,17 +696,17 @@ class ExceptionHandler {
 			$i = 0;
 			foreach ($exceptions as $e) {
 				if ($i++ == 0) {
-					echo '<h2>' . htmlspecialchars(get_class($e), ENT_SUBSTITUTE) . '</h2>' . "\r\n"
+					echo '<h2>' . htmlspecialchars(get_class($e)) . '</h2>' . "\r\n"
 							. $this->buildDevelopmentExceptionHtmlContent($e);
 					continue;
 				}
 				
-				echo '<h2>caused by: ' . htmlspecialchars(get_class($e), ENT_SUBSTITUTE) . '</h2>' . "\r\n" 
+				echo '<h2>caused by: ' . htmlspecialchars(get_class($e)) . '</h2>' . "\r\n" 
 						. $this->buildDevelopmentExceptionHtmlContent($e);
 			}
 			
 			echo '<h2>Output</h2>' . "\r\n" .
-					'<pre>' . htmlspecialchars($output, ENT_SUBSTITUTE) . '</pre>'  . "\r\n";
+					'<pre>' . htmlspecialchars($output) . '</pre>'  . "\r\n";
 		}
 		
 		echo '</body>' . "\r\n" .
@@ -788,10 +788,10 @@ class ExceptionHandler {
 		do {
 			if ($first) $first = false;
 			else {
-				$html .= '<h3>caused by: ' . htmlspecialchars(get_class($e), ENT_SUBSTITUTE) . '</h3>' . "\r\n";
+				$html .= '<h3>caused by: ' . htmlspecialchars(get_class($e)) . '</h3>' . "\r\n";
 			}
 			
-			$html .= '<p>' . htmlspecialchars($e->getMessage(), ENT_SUBSTITUTE) . '</p>' . "\r\n";
+			$html .= '<p>' . htmlspecialchars($e->getMessage()) . '</p>' . "\r\n";
 			
 			if ($e instanceof \ErrorException || $e instanceof \Error) {
 				$filePath = $e->getFile();
@@ -799,15 +799,15 @@ class ExceptionHandler {
 				ThrowableInfoFactory::findCallPos($e, $filePath, $lineNo);
 				
 				if ($filePath !== null) {
-					$html .= '<p>File: <strong>' . htmlspecialchars($filePath, ENT_SUBSTITUTE) . '</strong></p>' . "\r\n";
+					$html .= '<p>File: <strong>' . htmlspecialchars($filePath) . '</strong></p>' . "\r\n";
 				}
 				
 				if ($lineNo !== null) {
-					$html .= '<p>Line: <strong>' . htmlspecialchars($lineNo, ENT_SUBSTITUTE) . '</strong></p>' . "\r\n";
+					$html .= '<p>Line: <strong>' . htmlspecialchars($lineNo) . '</strong></p>' . "\r\n";
 				}
 			}	
 			
-			$html .= '<pre>' .  htmlspecialchars(ThrowableInfoFactory::buildStackTraceString($e), ENT_SUBSTITUTE) . '</pre>' . "\r\n";
+			$html .= '<pre>' .  htmlspecialchars(ThrowableInfoFactory::buildStackTraceString($e)) . '</pre>' . "\r\n";
 		} while (null != ($e = $e->getPrevious()));
 			
 		return $html;
