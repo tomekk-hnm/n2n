@@ -45,6 +45,6 @@
 			<h1><i class="fa fa-cog"></i>Status: <?php $html->out($title) ?></h1>
 		</div>	
 	
-		<?php $view->import('inc\statusDevContent.html') ?>
+		<?php $view->import('inc\statusDevContent.html', $view->getParams()) ?>
 	</body>
 </html>
