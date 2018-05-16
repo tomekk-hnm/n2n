@@ -543,7 +543,7 @@ class ExceptionHandler {
 				'Reply-To: ' . $this->logMailAddresser  . "\r\n" .
 				'X-Mailer: PHP/' . phpversion();
 		
-		$subject = 'An ' . get_class($e) . ' occurred';
+		$subject = get_class($e) . ' occurred';
 		if ($times > 1) {
 			$subject .= ' ' . $times . ' times';
 		}
