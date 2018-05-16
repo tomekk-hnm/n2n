@@ -33,6 +33,7 @@ use n2n\reflection\ReflectionUtils;
 use n2n\core\TypeLoader;
 use n2n\web\http\controller\ControllerContext;
 use n2n\web\ui\ViewFactory;
+use n2n\io\IoException;
 
 // define('N2N_EXCEPTION_HANDLING_PHP_SEVERITIES', E_ALL | E_STRICT);
 // define('N2N_EXCEPTION_HANDLING_PHP_STRICT_ATTITUTE_SEVERITIES', E_STRICT | E_WARNING | E_NOTICE | E_CORE_WARNING | E_USER_WARNING | E_USER_NOTICE | E_DEPRECATED);
@@ -66,6 +67,7 @@ class ExceptionHandler {
 	private $logDetailFilePerm;
 	private $logMailRecipient;
 	private $logMailAddresser;
+	private $logMailBufferDirPath;
 	private $logStatusExceptionsEnabled = true;
 	private $logExcludedHttpStatus = array();
 	private $logger;
@@ -141,9 +143,16 @@ class ExceptionHandler {
 	 * @param string $mailRecipient
 	 * @param string $mailAddresser
 	 */
-	public function setLogMailRecipient($mailRecipient, $mailAddresser) {
+	public function setLogMailRecipient(string $mailRecipient, string $mailAddresser) {
 		$this->logMailRecipient = $mailRecipient;
 		$this->logMailAddresser = $mailAddresser;
+	}
+	
+	/**
+	 * @param string $logMailBufferDirPath
+	 */
+	public function setLogMailBufferDirPath(string $logMailBufferDirPath) {
+		$this->logMailBufferDirPath = $logMailBufferDirPath;
 	}
 	
 	public function setLogStatusExceptionsEnabled($logStatusExceptionsEnabled, array $logExcludedHttpStatus) {
@@ -487,13 +496,7 @@ class ExceptionHandler {
 			$detailMessage = $this->createDetailLogMessage($e);
 			
 			if (isset($this->logMailRecipient)) {
-				// @todo validate email
-				$subject = 'An ' . get_class($e) . ' occurred';
-				$header = 'From: ' . $this->logMailAddresser . "\r\n" .
-						'Reply-To: ' . $this->logMailAddresser  . "\r\n" .
-						'X-Mailer: PHP/' . phpversion();
-				
-				@mail($this->logMailRecipient, $subject, $detailMessage, $header);
+				$this->sendLogMail($e, $detailMessage);
 			}
 			
 			if (isset($this->logDetailDirPath)) {
@@ -520,14 +523,35 @@ class ExceptionHandler {
 				&& !($e instanceof PHPStrictException && $e->getSeverity() == E_STRICT)*/) {
 			try {
 				$this->logger->error($simpleMessage, $e);
-			} catch (\Exception $e) {
-				$logE = $this->createLoggingFailedException($e);;
+			} catch (\Throwable $e) {
+				$logE = $this->createLoggingFailedException($e);
 				$this->pendingLogException[spl_object_hash($logE)] = $logE;
 			}
 		}
 	}
 	
-	private function createLoggingFailedException(\Exception $reasonE) {
+	private function sendLogMail(\Throwable $e, string $detailMessage) {
+		$times = 1;
+		if ($this->logMailBufferDirPath !== null) {
+			$logMailBuffer = new LogMailBuffer($this->logMailBufferDirPath);
+			$times = $logMailBuffer->check($e);
+			
+			if ($times == 0) return;
+		}
+		
+		$header = 'From: ' . $this->logMailAddresser . "\r\n" .
+				'Reply-To: ' . $this->logMailAddresser  . "\r\n" .
+				'X-Mailer: PHP/' . phpversion();
+		
+		$subject = 'An ' . get_class($e) . ' occurred';
+		if ($times > 1) {
+			$subject .= ' ' . $times . ' times';
+		}
+		
+		@mail($this->logMailRecipient, $subject, $detailMessage, $header);
+	}
+	
+	private function createLoggingFailedException(\Throwable $reasonE) {
 		throw new LoggingFailedException('Exception logging failed.', 0, $reasonE);
 	}
 	/**
@@ -839,6 +863,108 @@ class ExceptionHandler {
 			}
 		}
 		return $output;
+	}
+}
+
+class LogMailBuffer {
+	const MAIL_BUFFER_FILE = 'mail-buffer.json';
+	
+	private $filePath;
+	private $data = array();
+	
+	function __construct(string $dirPath) {
+		if (!is_writable($dirPath)) {
+			throw new IoException('No access to log mail buffer file: ' . $dirPath);
+		}
+		
+		$this->filePath = $dirPath . DIRECTORY_SEPARATOR . self::MAIL_BUFFER_FILE;
+	
+		if (@file_exists($this->filePath)) {
+			$arr = @json_decode(@file_get_contents($this->filePath), true);
+			if (!empty($arr) && is_array($arr)) {
+				$this->data = $arr;
+			}
+		}
+		
+		if (!isset($this->data['throwableInfos']) || !is_array($this->data['throwableInfos'])) {
+			$this->data['throwableInfos'] = array();
+		}
+	}
+	
+	/**
+	 * @param \Throwable $e
+	 * @return number
+	 */
+	function check(\Throwable $e) {
+		$now = time();
+		$cHash = $this->hashThrowable($e);
+		$cThrowableInfo = $this->checkLogMailBufferData($now - (60 * 60 * 24), $cHash);
+		
+		$numThrowables = 0;
+		if ($cThrowableInfo === null) {
+			$cThrowableInfo = array('times' => 1, 'periodTimes' => 0, 'sent' => $now);
+			$numThrowables = 1;
+		} else if ($this->sr($cThrowableInfo['times'], $now - $cThrowableInfo['sent'])) {
+			$numThrowables = $cThrowableInfo['periodTimes'] + 1;
+			$cThrowableInfo['times'] += 1;
+			$cThrowableInfo['periodTimes'] = 0;
+		} else {
+			$cThrowableInfo['times'] += 1;
+			$cThrowableInfo['periodTimes'] += 1;
+		}
+		
+		$this->data['throwableInfos'][$cHash] = $cThrowableInfo;
+		
+		@file_put_contents($this->filePath, @json_encode($this->data));
+		
+		return $numThrowables;
+	}
+	
+	private function checkLogMailBufferData(int $expiryTime, string $cHash) {
+		$cThrowableInfo = null;
+
+		foreach ($this->data['throwableInfos'] as $hash => $throwableInfo) {
+			if (!isset($throwableInfo['times']) || !is_numeric($throwableInfo['times'])
+					|| !isset($throwableInfo['periodTimes']) || !is_numeric($throwableInfo['periodTimes'])
+					|| !isset($throwableInfo['sent']) || !is_numeric($throwableInfo['sent'])
+					|| $throwableInfo['sent'] < $expiryTime) {
+				unset($this->data['throwableInfos'][$hash]);
+				continue;
+			}
+			
+			if ($hash == $cHash) {
+				$cThrowableInfo = $throwableInfo;
+			}
+		}
+		
+		return $cThrowableInfo;
+	}
+	
+	/**
+	 * @param int $times
+	 * @param int $period
+	 * @return boolean
+	 */
+	private function sr(int $times, int $period) {
+		if ($times > 120) {
+			$times = 120;
+		}
+		
+		return $period > $times / 2 * 60;
+	}
+	
+	/**
+	 * @param \Throwable $t
+	 * @return string
+	 */
+	private function hashThrowable(\Throwable $t) {
+		$str = '';
+		
+		do {
+			$str .= get_class($t) . ':' . $t->getFile() . ':' . $t->getLine();
+		} while(null !== ($t = $t->getPrevious()));
+		
+		return md5($str);
 	}
 }
 

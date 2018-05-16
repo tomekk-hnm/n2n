@@ -60,6 +60,7 @@ class N2N {
 	const VERSION = '7.2.0-beta.3';
 	const LOG4PHP_CONFIG_FILE = 'log4php.xml'; 
 	const LOG_EXCEPTION_DETAIL_DIR = 'exceptions';
+	const LOG_MAIL_BUFFER_DIR = 'log-mail-buffer';
 	const LOG_ERR_FILE = 'err.log';
 	const SRV_BATCH_DIR = 'batch';
  	const NS = 'n2n';
@@ -357,6 +358,11 @@ class N2N {
 					$errorConfig->getLogExcludedHttpStatus());
 		} else {
 			self::$exceptionHandler->setLogStatusExceptionsEnabled(false, array());
+		}
+		
+		if ($errorConfig->isLogSendMailEnabled()) {
+			self::$exceptionHandler->setLogMailBufferDirPath(
+					$n2n->varStore->requestDirFsPath(VarStore::CATEGORY_TMP, self::NS, self::LOG_MAIL_BUFFER_DIR));
 		}
 		
 		Logger::configure((string) $n2n->varStore->requestFileFsPath(
