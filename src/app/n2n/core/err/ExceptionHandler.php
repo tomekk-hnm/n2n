@@ -914,8 +914,6 @@ class LogMailBuffer {
 			$cThrowableInfo['periodTimes'] += 1;
 		}
 		
-		test('!!!!!!!!!!!!!!!!!' . $numThrowables);
-		
 		$this->data['throwableInfos'][$cHash] = $cThrowableInfo;
 		
 		@file_put_contents($this->filePath, @json_encode($this->data));
@@ -952,7 +950,7 @@ class LogMailBuffer {
 		if ($times > 120) {
 			$times = 120;
 		}
-		test($period);
+		
 		return $period > $times / 2 * 60;
 	}
 	
