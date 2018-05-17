@@ -52,7 +52,7 @@ class FileN2nCache implements N2nCache {
 	 * {@inheritDoc}
 	 * @see \n2n\core\N2nCache::getStartupCacheStore()
 	 */
-	public function getStartupCacheStore() {
+	public function getStartupCacheStore(): ?CacheStore {
 		return $this->startupCacheStore;
 	}
 	

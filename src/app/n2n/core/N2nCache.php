@@ -24,6 +24,7 @@ namespace n2n\core;
 use n2n\core\config\AppConfig;
 use n2n\core\container\N2nContext;
 use n2n\core\container\AppCache;
+use n2n\util\cache\CacheStore;
 
 interface N2nCache {
 	/**
@@ -32,9 +33,9 @@ interface N2nCache {
 	public function varStoreInitilaized(VarStore $varStore);
 	
 	/**
-	 * @return \n2n\util\cache\CacheStore 
+	 * @return null|\n2n\util\cache\CacheStore 
 	 */
-	public function getStartupCacheStore();
+	public function getStartupCacheStore(): ?CacheStore;
 	
 	/**
 	 * @param AppConfig $appConfig
