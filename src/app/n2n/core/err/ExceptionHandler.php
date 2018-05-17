@@ -906,12 +906,15 @@ class LogMailBuffer {
 			$numThrowables = 1;
 		} else if ($this->sr($cThrowableInfo['times'], $now - $cThrowableInfo['sent'])) {
 			$numThrowables = $cThrowableInfo['periodTimes'] + 1;
+			$cThrowableInfo['sent'] = $now;
 			$cThrowableInfo['times'] += 1;
 			$cThrowableInfo['periodTimes'] = 0;
 		} else {
 			$cThrowableInfo['times'] += 1;
 			$cThrowableInfo['periodTimes'] += 1;
 		}
+		
+		test('!!!!!!!!!!!!!!!!!' . $numThrowables);
 		
 		$this->data['throwableInfos'][$cHash] = $cThrowableInfo;
 		
@@ -949,7 +952,7 @@ class LogMailBuffer {
 		if ($times > 120) {
 			$times = 120;
 		}
-		
+		test($period);
 		return $period > $times / 2 * 60;
 	}
 	
