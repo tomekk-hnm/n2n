@@ -950,7 +950,7 @@ class LogMailBuffer {
 		if ($times > 120) {
 			$times = 120;
 		}
-		test($period);
+		
 		return $period > $times / 2 * 60;
 	}
 	
