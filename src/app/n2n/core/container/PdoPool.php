@@ -122,7 +122,7 @@ class PdoPool implements ThreadScoped {
 	 * @return \n2n\persistence\orm\EntityManagerFactory
 	 */
 	public function getEntityManagerFactory($persistenceUnitName = null) {
-		if ($persistenceUnitName !== null) {
+		if ($persistenceUnitName === null) {
 			$persistenceUnitName = self::DEFAULT_DS_NAME;
 		}
 		
