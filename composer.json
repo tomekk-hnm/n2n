@@ -27,6 +27,7 @@
         "n2n/n2n-io": "master-dev",
         "n2n/n2n-l10n": "master-dev",
         "n2n/n2n-log4php": "master-dev",
+        "n2n/n2n-mail": "master-dev",
         "n2n/n2n-reflection": "master-dev",
         "n2n/n2n-util": "master-dev"
     },
