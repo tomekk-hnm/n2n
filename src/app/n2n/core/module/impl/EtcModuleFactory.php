@@ -26,6 +26,8 @@ use n2n\util\config\source\ConfigSource;
 use n2n\core\module\ModuleFactory;
 use n2n\util\config\source\IniFileConfigSource;
 use n2n\util\ex\IllegalStateException;
+use n2n\reflection\ArgUtils;
+use n2n\io\fs\FsPath;
 
 class EtcModuleFactory implements ModuleFactory {
 	const DEFAULT_APP_INI_FILE = 'app.ini';
@@ -33,6 +35,8 @@ class EtcModuleFactory implements ModuleFactory {
 	
 	private $appIniFileName;
 	private $moduleIniFileName;
+	
+	private $additionalEtcFsPaths = array();
 	
 	private $mainAppConfigSource;
 	private $modules;
@@ -43,29 +47,41 @@ class EtcModuleFactory implements ModuleFactory {
 		$this->moduleIniFileName = $moduleIniFileName;
 	}
 	
+	public function setAdditionionalEtcFsPaths(array $fsPaths) {
+		ArgUtils::valArray($fsPaths, FsPath::class);
+		$this->additionalEtcFsPaths = $fsPaths;
+	}
+	
 	public function init(VarStore $varStore) {
 		$this->mainAppConfigSource = new IniFileConfigSource($varStore->requestFileFsPath(
 				VarStore::CATEGORY_ETC, null, null, $this->appIniFileName));
 		
 		$this->modules = array();
 		
-		$etcFsPath = $varStore->requestDirFsPath(VarStore::CATEGORY_ETC, null, null);
+		$etcFsPaths = [$varStore->requestDirFsPath(VarStore::CATEGORY_ETC, null, null)];
+		array_push($etcFsPaths, ...$this->additionalEtcFsPaths);
 		
-		foreach ($etcFsPath->getChildDirectories() as $confDirPath) {
-			$moduleNamespace = VarStore::dirNameToNamespace($confDirPath->getName());
+		foreach ($etcFsPaths as $key =>  $etcFsPath) {
+			foreach ($etcFsPath->getChildDirectories() as $confDirPath) {
+				$moduleNamespace = VarStore::dirNameToNamespace($confDirPath->getName());
+					
+				$appConfigSource = null;
+				if (is_file($appConfigFilePath = $confDirPath . DIRECTORY_SEPARATOR . $this->appIniFileName)) {
+					$appConfigSource = new IniFileConfigSource($appConfigFilePath);
+				}
+							
+				$moduleConfigSource = null;
+				if (is_file($moduleConfigFilePath = $confDirPath . DIRECTORY_SEPARATOR . self::DEFAULT_MODULE_INI_FILE)) {
+					$moduleConfigSource = new IniFileConfigSource($moduleConfigFilePath);
+				}
+					
+				$this->modules[$moduleNamespace] = new LazyModule($moduleNamespace, $appConfigSource,
+						$moduleConfigSource);
 				
-			$appConfigSource = null;
-			if (is_file($appConfigFilePath = $confDirPath . DIRECTORY_SEPARATOR . $this->appIniFileName)) {
-				$appConfigSource = new IniFileConfigSource($appConfigFilePath);
+				if ($key != 0) {
+					$varStore->overwritePath(VarStore::CATEGORY_ETC, $moduleNamespace, $confDirPath);
+				}
 			}
-						
-			$moduleConfigSource = null;
-			if (is_file($moduleConfigFilePath = $confDirPath . DIRECTORY_SEPARATOR . self::DEFAULT_MODULE_INI_FILE)) {
-				$moduleConfigSource = new IniFileConfigSource($moduleConfigFilePath);
-			}
-				
-			$this->modules[$moduleNamespace] = new LazyModule($moduleNamespace, $appConfigSource,
-					$moduleConfigSource);
 		}
 	}
 	
