@@ -27,6 +27,7 @@ use n2n\io\fs\FsPath;
 use n2n\io\IoUtils;
 use n2n\util\ex\IllegalStateException;
 use n2n\io\IoException;
+use n2n\reflection\ArgUtils;
 
 class VarStore {
 	const CATEGORY_ETC = 'etc';
@@ -38,19 +39,22 @@ class VarStore {
 	private $varPath;
 	private $dirPerm;
 	private $filePerm;
+	
+	private $moduleOverwrittenPaths = array();
+		
 	/**
 	 * 
 	 * @param string $varPath
 	 * @param string $dirPerm
 	 * @param string $filePerm
 	 */
-	public function __construct($varPath, $dirPerm, $filePerm) {
+	public function __construct(string $varPath, ?string $dirPerm, ?string $filePerm) {
 		$this->varPath = $varPath;
 		$this->dirPerm = $dirPerm;
 		$this->filePerm = $filePerm;
 	}
 	
-	public function setDirPerm($dirPerm) {
+	public function setDirPerm(?string $dirPerm) {
 		$this->dirPerm = $dirPerm;
 	}
 	
@@ -58,12 +62,22 @@ class VarStore {
 		return $this->dirPerm;
 	}
 	
-	public function setFilePerm($filePerm) {
+	public function setFilePerm(?string $filePerm) {
 		$this->filePerm = $filePerm;
 	}
 	
 	public function getFilePerm() {
 		return $this->filePerm;
+	}
+	
+	public function overwritePath(string $category, string $moduleNamespace, string $path) {
+		ArgUtils::valEnum($category, self::getCategories(), null, false, 'category');
+		
+		if (!isset($this->moduleOverwrittenPaths[$category])) {
+			$this->moduleOverwrittenPaths[$category] = [];
+		}
+		
+		$this->moduleOverwrittenPaths[$category][$moduleNamespace] = $path;
 	}
 	
 	private function validatePathPart($pathPart) {
@@ -82,17 +96,23 @@ class VarStore {
 	 * @throws IllegalStateException
 	 * @return \n2n\io\fs\FsPath
 	 */
-	public function requestDirFsPath($category, $module, $directoryName, $create = true, $required = true) {
+	public function requestDirFsPath(string $category, string $moduleNamespace = null, string $directoryName = null, bool $create = true, bool $required = true) {
 		if (!in_array($category, self::getCategories())) {
 			throw new \InvalidArgumentException('Invalid var category \'' . $category . '\'. Available categories: '
 					. implode(', ', self::getCategories()));
 		}
 		
-		$dirPath = $this->varPath . DIRECTORY_SEPARATOR . $category;
-		if (isset($module)) {
-			$modulePathPart = self::namespaceToDirName((string) $module);
-			$this->validatePathPart($modulePathPart);
-			$dirPath .= DIRECTORY_SEPARATOR . $modulePathPart;
+		$dirPath = null;
+		if ($moduleNamespace !== null && isset($this->moduleOverwrittenPaths[$category][$moduleNamespace])) {
+			$dirPath = $this->moduleOverwrittenPaths[$category][$moduleNamespace];
+		} else {
+			$dirPath = $this->varPath . DIRECTORY_SEPARATOR . $category;
+			
+			if (isset($moduleNamespace)) {
+				$modulePathPart = self::namespaceToDirName((string) $moduleNamespace);
+				$this->validatePathPart($modulePathPart);
+				$dirPath .= DIRECTORY_SEPARATOR . $modulePathPart;
+			}
 		}
 		
 		if (isset($directoryName)) {
