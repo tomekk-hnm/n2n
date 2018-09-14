@@ -60,7 +60,7 @@ class EtcModuleFactory implements ModuleFactory {
 		
 		$etcFsPaths = [$varStore->requestDirFsPath(VarStore::CATEGORY_ETC, null, null)];
 		if (!empty($this->additionalEtcFsPaths)) {
-			$etcFsPaths = array_merge($etcFsPaths, ...$this->additionalEtcFsPaths);
+			$etcFsPaths = array_push($etcFsPaths, ...$this->additionalEtcFsPaths);
 		}
 		
 		foreach ($etcFsPaths as $key =>  $etcFsPath) {
