@@ -59,7 +59,9 @@ class EtcModuleFactory implements ModuleFactory {
 		$this->modules = array();
 		
 		$etcFsPaths = [$varStore->requestDirFsPath(VarStore::CATEGORY_ETC, null, null)];
-		array_push($etcFsPaths, ...$this->additionalEtcFsPaths);
+		if (!empty($this->additionalEtcFsPaths)) {
+			array_push($etcFsPaths, ...$this->additionalEtcFsPaths);
+		}
 		
 		foreach ($etcFsPaths as $key =>  $etcFsPath) {
 			foreach ($etcFsPath->getChildDirectories() as $confDirPath) {
