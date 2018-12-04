@@ -73,7 +73,7 @@ class EtcModuleFactory implements ModuleFactory {
 				}
 							
 				$moduleConfigSource = null;
-				if (is_file($moduleConfigFilePath = $confDirPath . DIRECTORY_SEPARATOR . self::DEFAULT_MODULE_INI_FILE)) {
+				if (is_file($moduleConfigFilePath = $confDirPath . DIRECTORY_SEPARATOR . $this->moduleIniFileName)) {
 					$moduleConfigSource = new IniFileConfigSource($moduleConfigFilePath);
 				}
 					
