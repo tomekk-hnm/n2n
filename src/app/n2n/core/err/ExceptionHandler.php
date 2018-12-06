@@ -797,6 +797,9 @@ class ExceptionHandler {
 		$view->setControllerContext(new ControllerContext($request->getCmdPath(), $request->getCmdContextPath()));
 		$response->reset();
 		$response->setStatus($status);
+		if ($e instanceof StatusException) {
+			$e->prepareResponse($response);
+		}
 		$response->send($view);
 	}
 	/**

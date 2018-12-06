@@ -53,11 +53,13 @@ use n2n\web\http\ResponseCacheStore;
 use n2n\web\dispatch\map\CorruptedDispatchException;
 use n2n\web\http\BadRequestException;
 use n2n\core\module\impl\EtcModuleFactory;
+use n2n\web\http\Method;
+use n2n\web\http\MethodNotAllowedException;
 
 define('N2N_CRLF', "\r\n");
 
 class N2N {
-	const VERSION = '7.2.0-beta.5';
+	const VERSION = '7.2.0';
 	const LOG4PHP_CONFIG_FILE = 'log4php.xml'; 
 	const LOG_EXCEPTION_DETAIL_DIR = 'exceptions';
 	const LOG_MAIL_BUFFER_DIR = 'log-mail-buffer';
@@ -664,13 +666,20 @@ class N2N {
 	
 	public static function autoInvokeControllers() {
 		$n2nContext = self::_i()->n2nContext;
+		
+		$request = $n2nContext->getHttpContext()->getRequest();
 		$response = $n2nContext->getHttpContext()->getResponse();
+		
+		if ($request->getMethod() == Method::OPTIONS 
+				|| $request->getOrigMethodName() != Method::toString($request->getMethod())) {
+			throw new MethodNotAllowedException(Method::HEAD|Method::GET|Method::POST|Method::PUT|Method::PATCH|Method::DELETE|Method::TRACE);
+		}
+		
 		if ($response->sendCachedPayload()) {
 			return;
 		}
 		
 		$controllerRegistry = $n2nContext->lookup(ControllerRegistry::class);
-		$request = $n2nContext->getHttpContext()->getRequest();
 		$controllerRegistry->createControllingPlan($request->getCmdPath(), $request->getSubsystemName())->execute(); 
 	}
 	
