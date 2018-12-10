@@ -339,6 +339,7 @@ class N2N {
 		self::$n2n->init($n2nCache);
 		self::$initialized = true;
 		
+		// @todo move up so exception will be grouped earlier.
 		self::initLogging(self::$n2n);
 		
 		self::$exceptionHandler->checkForStartupErrors();
