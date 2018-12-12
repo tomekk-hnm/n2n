@@ -671,8 +671,8 @@ class N2N {
 		$request = $n2nContext->getHttpContext()->getRequest();
 		$response = $n2nContext->getHttpContext()->getResponse();
 		
-		if ($request->getMethod() == Method::OPTIONS 
-				|| $request->getOrigMethodName() != Method::toString($request->getMethod())) {
+		if ($request->getOrigMethodName() != Method::HEAD 
+				&& ($request->getMethod() == Method::OPTIONS || $request->getOrigMethodName() != Method::toString($request->getMethod()))) {
 			throw new MethodNotAllowedException(Method::HEAD|Method::GET|Method::POST|Method::PUT|Method::PATCH|Method::DELETE|Method::TRACE);
 		}
 		
