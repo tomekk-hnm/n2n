@@ -24,10 +24,10 @@ namespace n2n\core\err;
 use n2n\util\ex\err\EnhancedError;
 use n2n\util\ex\QueryStumble;
 use n2n\util\ex\Documentable;
-use n2n\reflection\ReflectionUtils;
 use n2n\io\IoUtils;
 use n2n\io\IoException;
 use n2n\util\SyntaxUtils;
+use n2n\util\type\TypeUtils;
 
 class ThrowableInfoFactory {
 
@@ -128,7 +128,7 @@ class ThrowableInfoFactory {
 	
 		$boundValues = array();
 		foreach ((array) $e->getBoundValues() as $key => $value) {
-			$boundValues[$key] = ReflectionUtils::buildScalar($value);
+			$boundValues[$key] = TypeUtils::buildScalar($value);
 		}
 		$throwableInfo->setBoundValues($boundValues);
 	}

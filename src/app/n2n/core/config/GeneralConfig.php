@@ -22,7 +22,7 @@
 namespace n2n\core\config;
 
 use n2n\log4php\LoggerLevel;
-use n2n\reflection\ArgUtils;
+use n2n\util\type\ArgUtils;
 
 class GeneralConfig {
 	private $pageName;

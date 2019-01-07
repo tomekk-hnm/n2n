@@ -22,7 +22,7 @@
 namespace n2n\core\config;
 
 use n2n\web\http\Supersystem;
-use n2n\reflection\ArgUtils;
+use n2n\util\type\ArgUtils;
 use n2n\web\http\Subsystem;
 use n2n\web\http\controller\ControllerDef;
 use n2n\l10n\N2nLocale;

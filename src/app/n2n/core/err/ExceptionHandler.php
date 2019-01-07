@@ -29,11 +29,11 @@ use n2n\core\N2N;
 use n2n\io\IoUtils;
 use n2n\web\http\BadRequestException;
 use n2n\util\ex\QueryStumble;
-use n2n\reflection\ReflectionUtils;
 use n2n\core\TypeLoader;
 use n2n\web\http\controller\ControllerContext;
 use n2n\web\ui\ViewFactory;
 use n2n\io\IoException;
+use n2n\util\type\TypeUtils;
 
 // define('N2N_EXCEPTION_HANDLING_PHP_SEVERITIES', E_ALL | E_STRICT);
 // define('N2N_EXCEPTION_HANDLING_PHP_STRICT_ATTITUTE_SEVERITIES', E_STRICT | E_WARNING | E_NOTICE | E_CORE_WARNING | E_USER_WARNING | E_USER_NOTICE | E_DEPRECATED);
@@ -597,7 +597,7 @@ class ExceptionHandler {
 				$boundValuesStr = "";
 				foreach($e->getBoundValues() as $name => $value) {
 					if (!mb_strlen($boundValuesStr)) $boundValuesStr .= ', ';
-					$boundValuesStr .= $name . '=' . ReflectionUtils::buildScalar($value) . PHP_EOL;
+					$boundValuesStr .= $name . '=' . TypeUtils::buildScalar($value) . PHP_EOL;
 				}
 				$debugContent .= 'Bound values: ' . $boundValuesStr . PHP_EOL;
 			}

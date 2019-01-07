@@ -27,7 +27,6 @@ use n2n\l10n\N2nLocale;
 use n2n\context\LookupManager;
 use n2n\reflection\ReflectionUtils;
 use n2n\web\http\HttpContextNotAvailableException;
-use n2n\reflection\magic\MagicObjectUnavailableException;
 use n2n\core\module\UnknownModuleException;
 use n2n\l10n\DynamicTextCollection;
 use n2n\reflection\magic\MagicUtils;
@@ -53,6 +52,7 @@ use n2n\persistence\orm\EntityManagerFactory;
 use n2n\persistence\orm\EntityManager;
 use n2n\core\container\PdoPool;
 use n2n\web\http\Session;
+use n2n\util\magic\MagicObjectUnavailableException;
 
 class AppN2nContext implements N2nContext {
 	private $transactionManager;
@@ -192,7 +192,7 @@ class AppN2nContext implements N2nContext {
 	
 	/**
 	 * {@inheritDoc}
-	 * @see \n2n\reflection\magic\MagicContext::lookup()
+	 * @see \n2n\util\magic\MagicContext::lookup()
 	 */
 	public function lookup($id, $required = true) {
 		if ($id instanceof \ReflectionClass) {

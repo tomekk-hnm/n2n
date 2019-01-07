@@ -22,7 +22,7 @@
 namespace n2n\core;
 
 use n2n\util\StringUtils;
-use n2n\reflection\ReflectionUtils;
+use n2n\util\type\TypeUtils;
 
 class TypeLoader {
 	const SCRIPT_FILE_EXTENSION = '.php';
@@ -153,7 +153,7 @@ class TypeLoader {
 	 * @return array
 	 */
 	public static function getNamespaceDirPaths($namespace) {
-		if (ReflectionUtils::hasSpecialChars($namespace, false)) {
+		if (TypeUtils::hasSpecialChars($namespace, false)) {
 			throw new \InvalidArgumentException('Namespace contains invalid characters: ' . $namespace);
 		}
 		

@@ -21,13 +21,13 @@
  */
 namespace n2n\core;
 
-use n2n\reflection\ReflectionUtils;
 use n2n\io\InvalidPathException;
 use n2n\io\fs\FsPath;
 use n2n\io\IoUtils;
 use n2n\util\ex\IllegalStateException;
 use n2n\io\IoException;
-use n2n\reflection\ArgUtils;
+use n2n\util\type\ArgUtils;
+use n2n\util\type\TypeUtils;
 
 class VarStore {
 	const CATEGORY_ETC = 'etc';
@@ -166,13 +166,13 @@ class VarStore {
 	}
 	
 	public static function namespaceToDirName(string $namespace) {
-		return ReflectionUtils::encodeNamespace($namespace);
+		return TypeUtils::encodeNamespace($namespace);
 	}
 	
 	public static function dirNameToNamespace(string $dirName) {
-		$namespace = ReflectionUtils::decodeNamespace($dirName);
+		$namespace = TypeUtils::decodeNamespace($dirName);
 		
-		if (ReflectionUtils::hasSpecialChars($namespace, false)) {
+		if (TypeUtils::hasSpecialChars($namespace, false)) {
 			throw new \InvalidArgumentException('Invalid namespace: ' . $namespace);
 		}
 		

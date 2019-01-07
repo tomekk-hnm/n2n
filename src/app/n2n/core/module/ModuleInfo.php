@@ -21,7 +21,7 @@
  */
 namespace n2n\core\module;
 
-use n2n\reflection\ArgUtils;
+use n2n\util\type\ArgUtils;
 
 class ModuleInfo {
 	private $name;

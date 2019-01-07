@@ -48,7 +48,7 @@ use n2n\l10n\L10n;
 use n2n\core\module\ModuleManager;
 use n2n\core\container\impl\AppN2nContext;
 use n2n\web\http\HttpContext;
-use n2n\reflection\CastUtils;
+use n2n\util\type\CastUtils;
 use n2n\web\http\ResponseCacheStore;
 use n2n\web\dispatch\map\CorruptedDispatchException;
 use n2n\web\http\BadRequestException;
