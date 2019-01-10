@@ -115,10 +115,6 @@ class N2N {
 	}
 
 	protected function init(N2nCache $n2nCache) {
-		$n2nCache->varStoreInitilaized($this->varStore);
-		$this->initConfiguration($n2nCache);
-		
-		Sync::init($this->varStore->requestDirFsPath(VarStore::CATEGORY_TMP, self::NS, self::SYNC_DIR));
 		
 		$this->initN2nContext($n2nCache);
 		$n2nCache->n2nContextInitialized($this->n2nContext);
@@ -315,12 +311,7 @@ class N2N {
 	private static $n2n;
 	private static $shutdownListeners = array();
 	
-	/**
-	 * @param string $publicDirPath
-	 * @param string $varDirPath
-	 * @param array $moduleDirPaths
-	 */
-	public static function initialize(string $publicDirPath, string $varDirPath, 
+	public static function setup(string $publicDirPath, string $varDirPath,
 			N2nCache $n2nCache, ModuleFactory $moduleFactory = null) {
 		mb_internal_encoding(self::CHARSET);
 		// 		ini_set('default_charset', self::CHARSET);
@@ -330,11 +321,26 @@ class N2N {
 		
 		self::$n2n = new N2N(new FsPath(IoUtils::realpath($publicDirPath)),
 				new FsPath(IoUtils::realpath($varDirPath)));
-				
+		
 		if ($moduleFactory === null) {
 			$moduleFactory = new EtcModuleFactory();
 		}
 		self::$n2n->initModules($moduleFactory);
+		
+		$n2nCache->varStoreInitilaized(self::$n2n->varStore);
+		self::$n2n->initConfiguration($n2nCache);
+		
+		Sync::init(self::$n2n->varStore->requestDirFsPath(VarStore::CATEGORY_TMP, self::NS, self::SYNC_DIR));
+	}
+	
+	/**
+	 * @param string $publicDirPath
+	 * @param string $varDirPath
+	 * @param array $moduleDirPaths
+	 */
+	public static function initialize(string $publicDirPath, string $varDirPath, 
+			N2nCache $n2nCache, ModuleFactory $moduleFactory = null) {
+		self::setup($publicDirPath, $varDirPath, $n2nCache, $moduleFactory);
 		
 		self::$n2n->init($n2nCache);
 		self::$initialized = true;
