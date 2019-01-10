@@ -24,7 +24,7 @@
 	"require" : {
 		"php" : ">=7.0",
 		"n2n/n2n-composer-module-installer" : "master-dev",
-		"n2n/n2n-config": "master-dev"
+		"n2n/n2n-config": "master-dev",
 		"n2n/n2n-io" : "master-dev",
 		"n2n/n2n-l10n" : "master-dev",
 		"n2n/n2n-log4php" : "master-dev",
