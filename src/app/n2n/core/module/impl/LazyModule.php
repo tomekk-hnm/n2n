@@ -23,17 +23,17 @@ namespace n2n\core\module\impl;
 
 use n2n\reflection\ReflectionUtils;
 use n2n\core\module\ModuleInfo;
-use n2n\util\config\source\ConfigSource;
+use n2n\config\source\ConfigSource;
 use n2n\core\config\build\GroupedConfigSourceReader;
-use n2n\util\config\InvalidConfigurationException;
+use n2n\config\InvalidConfigurationException;
 use n2n\core\TypeNotFoundException;
 use n2n\core\config\build\CombinedConfigSource;
 use n2n\core\container\N2nContext;
-use n2n\util\config\source\WritableConfigSource;
+use n2n\config\source\WritableConfigSource;
 use n2n\util\ex\IllegalStateException;
 use n2n\core\module\Module;
 use n2n\core\module\ConfigDescriber;
-use n2n\util\config\Attributes;
+use n2n\config\Attributes;
 
 class LazyModule implements Module {	
 	const GROUP_INFO = 'info';

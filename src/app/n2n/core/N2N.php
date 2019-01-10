@@ -122,7 +122,7 @@ class N2N {
 	/**
 	 * 
 	 * @param \n2n\core\config\AppConfig
-	 * @throws \n2n\util\config\InvalidConfigurationException
+	 * @throws \n2n\config\InvalidConfigurationException
 	 */
 	private function initConfiguration(N2nCache $n2nCache) {
 		$cacheStore = $n2nCache->getStartupCacheStore();

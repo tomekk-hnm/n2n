@@ -22,9 +22,9 @@
 namespace n2n\core\module\impl;
 
 use n2n\core\VarStore;
-use n2n\util\config\source\ConfigSource;
+use n2n\config\source\ConfigSource;
 use n2n\core\module\ModuleFactory;
-use n2n\util\config\source\IniFileConfigSource;
+use n2n\config\source\impl\IniFileConfigSource;
 use n2n\util\ex\IllegalStateException;
 use n2n\util\type\ArgUtils;
 use n2n\io\fs\FsPath;

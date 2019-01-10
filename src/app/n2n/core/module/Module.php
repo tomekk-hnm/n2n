@@ -31,13 +31,13 @@ interface Module {
 	public function getNamespace();
 	
 	/**
-	 * @return \n2n\util\config\source\ConfigSource
+	 * @return \n2n\config\source\ConfigSource
 	 */
 	public function getAppConfigSource();
 	
 	/**
 	 * @return \n2n\core\module\ModuleInfo
-	 * @throws \n2n\util\config\InvalidConfigurationException
+	 * @throws \n2n\config\InvalidConfigurationException
 	 */
 	public function getModuleInfo(): ModuleInfo;
 	
@@ -60,7 +60,7 @@ interface Module {
 	 * @param N2nContext $n2nContext
 	 * @return \n2n\core\module\ConfigDescriber
 	 * @throws \n2n\util\ex\IllegalStateException if {@Module::hasConfigDescriber()} returns false.
-	 * @throws \n2n\util\config\InvalidConfigurationException
+	 * @throws \n2n\config\InvalidConfigurationException
 	 */
 	public function createConfigDescriber(N2nContext $n2nContext): ConfigDescriber;
 	

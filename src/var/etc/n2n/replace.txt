@@ -124,3 +124,22 @@ TypeUtils::decodeNamespace(
 
 ReflectionUtils::hasSpecialChars(
 TypeUtils::hasSpecialChars(
+
+
+n2n\\util\\config
+n2n\config
+
+n2n\\config\\source\\Ini
+n2n\config\source\impl\Ini
+
+n2n\\config\\source\\Json
+n2n\config\source\impl\Json
+
+n2n\\config\\source\\Cache
+n2n\config\source\impl\Cache
+
+n2n\\config\\source\\Simple
+n2n\config\source\impl\Simple
+
+n2n\\config\\source\\WritableIni
+n2n\config\source\impl\WritableIni

@@ -21,9 +21,9 @@
  */
 namespace n2n\core\config\build;
 
-use n2n\util\config\source\ConfigSource;
-use n2n\util\config\InvalidConfigurationException;
-use n2n\util\config\Attributes;
+use n2n\config\source\ConfigSource;
+use n2n\config\InvalidConfigurationException;
+use n2n\config\Attributes;
 use n2n\util\ex\IllegalStateException;
 
 class GroupedConfigSourceReader {

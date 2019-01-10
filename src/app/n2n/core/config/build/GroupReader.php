@@ -21,12 +21,12 @@
  */
 namespace n2n\core\config\build;
 
-use n2n\util\config\InvalidConfigurationException;
-use n2n\util\config\AttributesException;
+use n2n\config\InvalidConfigurationException;
+use n2n\config\AttributesException;
 use n2n\l10n\N2nLocale;
 use n2n\l10n\IllegalN2nLocaleFormatException;
 use n2n\io\IoUtils;
-use n2n\util\config\InvalidAttributeException;
+use n2n\config\InvalidAttributeException;
 
 class GroupReader {
 	private $groupName;

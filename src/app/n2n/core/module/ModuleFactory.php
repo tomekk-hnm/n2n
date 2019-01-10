@@ -23,14 +23,14 @@ namespace n2n\core\module;
 
 use n2n\core\VarStore;
 use n2n\util\ex\IllegalStateException;
-use n2n\util\config\source\ConfigSource;
+use n2n\config\source\ConfigSource;
 
 interface ModuleFactory {
 	
 	public function init(VarStore $varStore);
 
 	/**
-	 * @return \n2n\util\config\source\ConfigSource
+	 * @return \n2n\config\source\ConfigSource
 	 * * @throws IllegalStateException if {@link self::init()} has not been called yet.
 	 */
 	public function getMainAppConfigSource(): ConfigSource;
