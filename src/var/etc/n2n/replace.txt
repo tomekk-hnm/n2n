@@ -143,3 +143,9 @@ n2n\config\source\impl\Simple
 
 n2n\\config\\source\\WritableIni
 n2n\config\source\impl\WritableIni
+
+n2n\\reflection\\property\\TypeConstraint
+n2n\util\type\TypeConstraint
+
+n2n\\reflection\\property\\ValueIncompatibleWithConstraintsException
+n2n\util\type\ValueIncompatibleWithConstraintsException
