@@ -21,7 +21,7 @@
  */
 namespace n2n\core\config\build;
 
-use n2n\config\Attributes;
+use n2n\util\type\attrs\Attributes;
 
 class AttributesDef {
 	private $attributes;

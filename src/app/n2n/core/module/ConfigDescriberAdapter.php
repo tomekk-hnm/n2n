@@ -21,7 +21,7 @@
  */
 namespace n2n\core\module;
 
-use n2n\config\Attributes;
+use n2n\util\type\attrs\Attributes;
 use n2n\core\VarStore;
 use n2n\config\source\impl\JsonFileConfigSource;
 use n2n\core\container\N2nContext;

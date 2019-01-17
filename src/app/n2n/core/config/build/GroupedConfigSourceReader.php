@@ -23,7 +23,7 @@ namespace n2n\core\config\build;
 
 use n2n\config\source\ConfigSource;
 use n2n\config\InvalidConfigurationException;
-use n2n\config\Attributes;
+use n2n\util\type\attrs\Attributes;
 use n2n\util\ex\IllegalStateException;
 
 class GroupedConfigSourceReader {

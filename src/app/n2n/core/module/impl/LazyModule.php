@@ -33,7 +33,7 @@ use n2n\config\source\WritableConfigSource;
 use n2n\util\ex\IllegalStateException;
 use n2n\core\module\Module;
 use n2n\core\module\ConfigDescriber;
-use n2n\config\Attributes;
+use n2n\util\type\attrs\Attributes;
 
 class LazyModule implements Module {	
 	const GROUP_INFO = 'info';

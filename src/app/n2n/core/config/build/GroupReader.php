@@ -22,11 +22,11 @@
 namespace n2n\core\config\build;
 
 use n2n\config\InvalidConfigurationException;
-use n2n\config\AttributesException;
+use n2n\util\type\attrs\AttributesException;
 use n2n\l10n\N2nLocale;
 use n2n\l10n\IllegalN2nLocaleFormatException;
 use n2n\io\IoUtils;
-use n2n\config\InvalidAttributeException;
+use n2n\util\type\attrs\InvalidAttributeException;
 
 class GroupReader {
 	private $groupName;
@@ -195,7 +195,7 @@ class GroupReader {
 	public function getInt(string $attributeName, bool $mandatory, $defaultValue = null) {
 		if (null !== ($def = $this->findAttributesDef($attributeName, $mandatory))) {
 			try {
-				return $def->getAttributes()->getInt($attributeName);
+				return $def->getAttributes()->reqInt($attributeName);
 			} catch (AttributesException $e) {
 				throw $this->createInvalidAttributeException($attributeName, $def, $e);
 			}
@@ -207,7 +207,7 @@ class GroupReader {
 	public function getBool(string $attributeName, bool $mandatory, $defaultValue = null) {
 		if (null !== ($def = $this->findAttributesDef($attributeName, $mandatory))) {
 			try {
-				return $def->getAttributes()->getBool($attributeName);
+				return $def->getAttributes()->reqBool($attributeName);
 			} catch (AttributesException $e) {
 				throw $this->createInvalidAttributeException($attributeName, $def, $e);
 			}
@@ -219,7 +219,7 @@ class GroupReader {
 	public function getEnum(string $attributeName, array $allowedValues, bool $mandatory, $defaultValue = null) {
 		if (null !== ($def = $this->findAttributesDef($attributeName, $mandatory))) {
 			try {
-				return $def->getAttributes()->getEnum($attributeName, $allowedValues);
+				return $def->getAttributes()->reqEnum($attributeName, $allowedValues);
 			} catch (AttributesException $e) {
 				throw $this->createInvalidAttributeException($attributeName, $def, $e);
 			}
