@@ -149,3 +149,6 @@ n2n\util\type\TypeConstraint
 
 n2n\\reflection\\property\\ValueIncompatibleWithConstraintsException
 n2n\util\type\ValueIncompatibleWithConstraintsException
+
+n2n\\config\\Attribut
+n2n\util\type\attrs\Attribut
