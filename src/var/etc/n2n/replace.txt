@@ -152,3 +152,9 @@ n2n\util\type\ValueIncompatibleWithConstraintsException
 
 n2n\\config\\Attribut
 n2n\util\type\attrs\Attribut
+
+n2n\\config\\InvalidAttributeException
+n2n\util\type\attrs\InvalidAttributeException
+
+n2n\\config\\LenientAttributeReader
+n2n\util\type\attrs\LenientAttributeReader
