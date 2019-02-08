@@ -114,17 +114,19 @@ class TransactionManager extends ObjectAdapter {
 		
 		if (!empty($this->transactions)) return;
 			
-		if (!$this->rollingBack) { 
-			$this->rollingBack = !$this->prepareCommit();
+		try {
+			if (!$this->rollingBack) { 
+				$this->rollingBack = !$this->prepareCommit();
+			}
+			
+			if ($this->rollingBack) {
+				$this->rollBack();
+			} else {
+				$this->commit();
+			}
+		} finally {
+			$this->reset();
 		}
-		
-		if ($this->rollingBack) {
-			$this->rollBack();
-		} else {
-			$this->commit();
-		}
-		
-		$this->reset();
 	}
 	
 	private function reset() {
