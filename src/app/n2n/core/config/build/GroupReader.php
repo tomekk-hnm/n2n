@@ -242,13 +242,13 @@ class GroupReader {
 		return $defaultValue;
 	}
 	
-	public function getScalarArray(string $attributeName): array {
+	public function getScalarArray(string $attributeName) {
 		$arrayMerger = new ArrayMerger($this);
 		$arrayMerger->loadScalarArray($attributeName);
 		return $arrayMerger->getArray();
 	}
 	
-	public function getN2nLocaleArray(string $attributeName): array {
+	public function getN2nLocaleArray(string $attributeName) {
 		$arrayMerger = new ArrayMerger($this);
 		$arrayMerger->loadScalarArray($attributeName);
 		
@@ -264,7 +264,7 @@ class GroupReader {
 		return $n2nLocales;
 	}
 	
-	public function getN2nLocaleKeyArray(string $attributeName): array {
+	public function getN2nLocaleKeyArray(string $attributeName) {
 		$arrayMerger = new ArrayMerger($this);
 		$arrayMerger->loadScalarArray($attributeName);
 	
