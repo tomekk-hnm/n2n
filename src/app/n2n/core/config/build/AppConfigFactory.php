@@ -113,7 +113,7 @@ class AppConfigFactory {
 				$groupReader->getString(self::PAGE_URL_KEY, false, null),
 				$groupReader->getNoIoStrictSpecialCharsString(self::APPLICATION_NAME_KEY, false, self::APPLICATION_NAME_DEFAULT),
 				$groupReader->getString(self::APPLICATION_LOG_LEVEL_KEY, false),
-				$groupReader->getScalarArray(self::APPLICATION_BATCH_CONTROLLER_NAMES_KEY, false, array()));
+				array_filter($groupReader->getScalarArray(self::APPLICATION_BATCH_CONTROLLER_NAMES_KEY, false, array())));
 	}
 	
 	const RESPONSE_CACHING_ENABLED_KEY = 'response.caching_enabled';
